@@ -3,7 +3,7 @@
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[5];
+    Resume[] storage = new Resume[10000];
     private static int resumeCounter = 0;
 
     void clear() {
