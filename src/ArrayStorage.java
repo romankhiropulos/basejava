@@ -1,77 +1,66 @@
 
-import java.util.ArrayList;
-
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    Resume[] storage = new Resume[5];
+    private static int resumeCounter = 0;
+
     void clear() {
-        storage = new Resume[10000];
-        for (int i = 0; i < storage.length; i++) {
+        for (int i = 0; i < resumeCounter; i++) {
             if (storage[i] != null)
                 storage[i] = null;
             else
                 break;
         }
+        resumeCounter = 0;
     }
 
     void save(Resume r) {
-        ArrayList<Resume> arrayList = new ArrayList<>();
-        int count = 0;
-        while (storage[count] != null) {
-            arrayList.add(storage[count]);
-            count++;
-        }
-
-        boolean isExisted = false;
-        for (Resume x : arrayList) {
-            if(x.uuid.equals(r.uuid))
-                isExisted = true;
-        }
-        if (!isExisted) {
-            for (int i = 0; i < storage.length; i++) {
-                if (storage[i] == null) {
-                    storage[i] = r;
+        for (int i = 0; i < 10000; i++) {
+            if(storage[i] != null) {
+                if (storage[i].uuid.equals(r.uuid))
                     break;
-                }
+            }
+
+            if (storage[i] == null) {
+                resumeCounter++;
+                storage[i] = r;
+                break;
             }
         }
     }
 
     Resume get(String uuid) {
         Resume returnResume = null;
-        for (int i = 0; i < storage.length; i++) {
-            if(storage[i] != null) {
-                if (storage[i].uuid.equals(uuid)) {
-                    returnResume = storage[i];
-                    break;
-                }
-            }
-            else
+        for (int i = 0; i < resumeCounter; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                returnResume = storage[i];
                 break;
+            }
         }
         return returnResume;
     }
 
     void delete(String uuid) {
-        ArrayList <Resume> arrayList = new ArrayList<>();
-        int count = 0;
-        while (storage[count] != null) {
-            arrayList.add(storage[count]);
-            count++;
+        boolean flag = false;
+        int deletePosition = 0;
+        for (int i = 0; i < resumeCounter; i++) {
+            if(storage[i].uuid.equals(uuid)) {
+                deletePosition = i;
+                flag = true;
+                break;
+            }
         }
-
-        for (int i = 0; i < arrayList.size(); i++) {
-            if(arrayList.get(i).uuid.equals(uuid))
-                arrayList.remove(i);
-        }
-
-        storage = new Resume[10000];
-        int i = 0;
-        for (Resume x : arrayList) {
-            storage[i] = x;
-            i++;
+        if(flag) {
+            for (int i = deletePosition; i < resumeCounter; i++) {
+                if(i == resumeCounter - 1) {
+                    storage[i] = null;
+                    break;
+                }
+                storage[i] = storage[i + 1];
+            }
+            resumeCounter--;
         }
     }
 
@@ -79,27 +68,13 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        int countOfResumes = 0;
-        for (Resume x : storage) {
-            if(x == null)
-                break;
-            countOfResumes++;
-        }
-
-        Resume[] storageNew = new Resume[countOfResumes];
-        for (int i = 0; i < countOfResumes; i++)
+        Resume[] storageNew = new Resume[resumeCounter];
+        for (int i = 0; i < resumeCounter; i++)
             storageNew[i] = storage[i];
-
         return storageNew;
     }
 
     int size() {
-        int i = 0;
-        for (Resume x : storage) {
-            if(x == null)
-                break;
-            i++;
-        }
-        return i;
+        return resumeCounter;
     }
 }
