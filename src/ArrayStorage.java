@@ -15,8 +15,8 @@ public class ArrayStorage {
 
     void save(Resume r) {
         for (int i = 0; i < 10000; i++) {
-            if(storage[i] != null) {
-                if (storage[i].uuid.equals(r.uuid)) {
+            if(storage[i] != null) {      // без этой проверки nullpointerexception
+                if (storage[i].uuid.equals(r.uuid)) {   // при добавлении первого резюме
                     break;
                 }
             }
@@ -30,10 +30,8 @@ public class ArrayStorage {
 
     Resume get(String uuid) {
         for (int i = 0; i < resumeCounter; i++) {
-            if(storage[i] != null) {
-                if (storage[i].uuid.equals(uuid)) {
-                    return storage[i];
-                }
+            if (storage[i].uuid.equals(uuid)) {
+                return storage[i];
             }
         }
         return null;
@@ -41,20 +39,18 @@ public class ArrayStorage {
 
     void delete(String uuid) {
         int deletePosition;
-        for (int i = 0; i < resumeCounter; i++) {
-            if (storage[i] != null) {
-                if (storage[i].uuid.equals(uuid)) {
-                    deletePosition = i;
-                    for (int j = deletePosition; j < resumeCounter; j++) {
-                        if (j == resumeCounter - 1) {
-                            storage[j] = null;
-                            break;
-                        }
-                        storage[j] = storage[j + 1];
+        for (int i = 0; i < resumeCounter; i++) { // здесь при i = 0; i < resumeCounter
+            if (storage[i].uuid.equals(uuid)) {   // и resumeCounter == 0 условие не выполняется
+                deletePosition = i;               // и цикл вообще не начинается. В get так же
+                for (int j = deletePosition; j < resumeCounter; j++) {
+                    if (j == resumeCounter - 1) {
+                        storage[j] = null;
+                        break;
                     }
-                    resumeCounter--;
-                    break;
+                    storage[j] = storage[j + 1];
                 }
+                resumeCounter--;
+                break;
             }
         }
     }
