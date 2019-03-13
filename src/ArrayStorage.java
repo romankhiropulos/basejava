@@ -8,10 +8,7 @@ public class ArrayStorage {
 
     void clear() {
         for (int i = 0; i < resumeCounter; i++) {
-            if (storage[i] != null)
-                storage[i] = null;
-            else
-                break;
+            storage[i] = null;
         }
         resumeCounter = 0;
     }
@@ -19,48 +16,46 @@ public class ArrayStorage {
     void save(Resume r) {
         for (int i = 0; i < 10000; i++) {
             if(storage[i] != null) {
-                if (storage[i].uuid.equals(r.uuid))
+                if (storage[i].uuid.equals(r.uuid)) {
                     break;
+                }
             }
-
-            if (storage[i] == null) {
+            if (i == resumeCounter) {
+                storage[resumeCounter] = r;
                 resumeCounter++;
-                storage[i] = r;
                 break;
             }
         }
     }
 
     Resume get(String uuid) {
-        Resume returnResume = null;
         for (int i = 0; i < resumeCounter; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                returnResume = storage[i];
-                break;
+            if(storage[i] != null) {
+                if (storage[i].uuid.equals(uuid)) {
+                    return storage[i];
+                }
             }
         }
-        return returnResume;
+        return null;
     }
 
     void delete(String uuid) {
-        boolean flag = false;
-        int deletePosition = 0;
+        int deletePosition;
         for (int i = 0; i < resumeCounter; i++) {
-            if(storage[i].uuid.equals(uuid)) {
-                deletePosition = i;
-                flag = true;
-                break;
-            }
-        }
-        if(flag) {
-            for (int i = deletePosition; i < resumeCounter; i++) {
-                if(i == resumeCounter - 1) {
-                    storage[i] = null;
+            if (storage[i] != null) {
+                if (storage[i].uuid.equals(uuid)) {
+                    deletePosition = i;
+                    for (int j = deletePosition; j < resumeCounter; j++) {
+                        if (j == resumeCounter - 1) {
+                            storage[j] = null;
+                            break;
+                        }
+                        storage[j] = storage[j + 1];
+                    }
+                    resumeCounter--;
                     break;
                 }
-                storage[i] = storage[i + 1];
             }
-            resumeCounter--;
         }
     }
 
@@ -69,8 +64,9 @@ public class ArrayStorage {
      */
     Resume[] getAll() {
         Resume[] storageNew = new Resume[resumeCounter];
-        for (int i = 0; i < resumeCounter; i++)
+        for (int i = 0; i < resumeCounter; i++) {
             storageNew[i] = storage[i];
+        }
         return storageNew;
     }
 
