@@ -3,7 +3,7 @@
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10000];
     private static int resumeCounter = 0;
 
     void clear() {
@@ -14,16 +14,36 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        for (int i = 0; i < 10000; i++) {
-            if(storage[i] != null) {      // без этой проверки nullpointerexception
-                if (storage[i].uuid.equals(r.uuid)) {   // при добавлении первого резюме
+        if(resumeCounter < 10000) {
+            for (int i = 0; i < 10000; i++) {
+                if (storage[i] != null) {      // без этой проверки nullpointerexception
+                    if (storage[i].uuid.equals(r.uuid)) {   // при добавлении первого резюме
+                        System.out.println("Resume is exist already");
+                        break;
+                    }
+                }
+                if (i == resumeCounter) {
+                    storage[resumeCounter] = r;
+                    resumeCounter++;
                     break;
                 }
             }
-            if (i == resumeCounter) {
-                storage[resumeCounter] = r;
-                resumeCounter++;
+        }
+        else {
+            System.out.println("Storage is full already");
+        }
+    }
+
+    void update(Resume r){
+        for (int i = 0; i < resumeCounter; i++) {
+            if (storage[i].equals(r)) {
+                storage[i] = new Resume();
+                storage[i].uuid = r.uuid;
+                System.out.println("Successful update");
                 break;
+            }
+            if(i == resumeCounter - 1){
+                System.out.println("Resume didn't update");
             }
         }
     }
@@ -32,6 +52,9 @@ public class ArrayStorage {
         for (int i = 0; i < resumeCounter; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 return storage[i];
+            }
+            if(i == resumeCounter - 1){
+                System.out.println("Resume didn't find");
             }
         }
         return null;
@@ -51,6 +74,9 @@ public class ArrayStorage {
                 }
                 resumeCounter--;
                 break;
+            }
+            if(i == resumeCounter - 1){
+                System.out.println("Resume didn't find");
             }
         }
     }
