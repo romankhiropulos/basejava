@@ -40,6 +40,7 @@ public class MainArray {
                     r = new Resume();
                     r.setUuid(uuid);
                     ARRAY_STORAGE.save(r);
+                    System.out.println("space" + r.getUuid() + "or not");
                     printAll();
                     break;
                 case "update":

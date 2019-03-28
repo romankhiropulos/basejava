@@ -12,12 +12,16 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.println("Resume " + uuid + " not exist");
-            return null;
+        if(uuid != null) {
+            int index = getIndex(uuid);
+            if (index == -1) {
+                System.out.println("Resume " + uuid + " not exist");
+                return null;
+            }
+            System.out.println("successful action get");
+            return storage[index];
         }
-        return storage[index];
+        return null;
     }
 
     protected abstract int getIndex(String uuid);
@@ -30,34 +34,44 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index == -1) {
-            System.out.println("Resume " + resume.getUuid() + " not exist");
-        } else {
-            storage[index] = resume;
+        if(resume != null) {
+            if (resume.getUuid() != null) {
+                int index = getIndex(resume.getUuid());
+                if (index == -1) {
+                    System.out.println("Resume " + resume.getUuid() + " not exist");
+                } else {
+                    storage[index] = resume;
+                }
+            }
         }
     }
 
     public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index != -1) {
-            System.out.println("Resume " + resume.getUuid() + " already exist");
-        } else if (resumeCounter >= STORAGE_LIMIT) {
-            System.out.println("Storage overflow");
-        } else {
-            storage[resumeCounter] = resume;
-            resumeCounter++;
+        if(resume != null) {
+            if(resume.getUuid() != null) {
+                int index = getIndex(resume.getUuid());
+                if (index != -1) {
+                    System.out.println("Resume " + resume.getUuid() + " already exist");
+                } else if (resumeCounter >= STORAGE_LIMIT) {
+                    System.out.println("Storage overflow");
+                } else {
+                    storage[resumeCounter] = resume;
+                    resumeCounter++;
+                }
+            }
         }
     }
 
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.println("Resume " + uuid + " not exist");
-        } else {
-            storage[index] = storage[resumeCounter - 1];
-            storage[resumeCounter - 1] = null;
-            resumeCounter--;
+        if(uuid != null) {
+            int index = getIndex(uuid);
+            if (index == -1) {
+                System.out.println("Resume " + uuid + " not exist");
+            } else {
+                storage[index] = storage[resumeCounter - 1];
+                storage[resumeCounter - 1] = null;
+                resumeCounter--;
+            }
         }
     }
 
