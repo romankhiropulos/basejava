@@ -10,19 +10,6 @@ public class ListStorage extends ArrayStorage {
 
     public static List<Resume> list = new ArrayList<>();
 
-    public static void main(String[] args) {
-
-        ListStorage listStorage = new ListStorage();
-        listStorage.save(new Resume("uuid1"));
-        listStorage.save(new Resume("uuid2"));
-        listStorage.save(new Resume("uuid3"));
-        listStorage.save(new Resume("uuid4"));
-
-        for (Resume x : listStorage.getAllList()) {
-            System.out.println(x);
-        }
-    }
-
     public Resume getResumeFromList(String uuid) {
         Resume resume = new Resume(uuid);
         if(!list.contains(resume)) {
@@ -31,7 +18,7 @@ public class ListStorage extends ArrayStorage {
         return resume;
     }
 
-    public List getAllList() {
+    public List<Resume> getAllList() {
         return list;
     }
 
@@ -58,7 +45,8 @@ public class ListStorage extends ArrayStorage {
 
     @Override
     protected void replaceResume(Resume resume, int index) {
-        list.add(index, resume);
+        list.remove(index);
+        list.add(resume);
     }
 
 }

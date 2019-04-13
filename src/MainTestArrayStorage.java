@@ -1,10 +1,5 @@
 import model.Resume;
-import storage.ArrayStorage;
-import storage.ListStorage;
 import storage.SortedArrayStorage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Test for your storage.ArrayStorage implementation
