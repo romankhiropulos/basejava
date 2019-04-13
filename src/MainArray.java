@@ -1,4 +1,5 @@
 import model.Resume;
+import storage.ListStorage;
 import storage.SortedArrayStorage;
 
 import java.io.BufferedReader;

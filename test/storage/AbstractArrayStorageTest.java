@@ -75,7 +75,7 @@ public abstract class AbstractArrayStorageTest {
             }
         }
         catch (StorageException e) {
-            Assert.fail();
+            Assert.fail("failHappened");
         }
         storage.save(new Resume("uuid10000"));
     }
@@ -113,9 +113,6 @@ public abstract class AbstractArrayStorageTest {
     @Test
     public void getAll() {
         Resume[] array = storage.getAll();
-        Assert.assertEquals(array[0], storage.get(UUID_1));
-        Assert.assertEquals(array[1], storage.get(UUID_2));
-        Assert.assertEquals(array[2], storage.get(UUID_3));
-        assertEquals(3, array.length);
+        Assert.assertArrayEquals("arrays_are_not_equals", array, this.storage.getAll());
     }
 }
