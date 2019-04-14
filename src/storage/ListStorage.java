@@ -1,6 +1,5 @@
 package storage;
 
-import exception.NotExistStorageException;
 import model.Resume;
 
 import java.util.ArrayList;
@@ -10,16 +9,19 @@ public class ListStorage extends ArrayStorage {
 
     public static List<Resume> list = new ArrayList<>();
 
-    public Resume getResumeFromList(String uuid) {
-        Resume resume = new Resume(uuid);
-        if(!list.contains(resume)) {
-            throw new NotExistStorageException(uuid);
-        }
-        return resume;
+    @Override
+    public void clearAllResumes() {
+        list.clear();
     }
 
-    public List<Resume> getAllList() {
-        return list;
+    @Override
+    public Resume getResume(int index) {
+        return list.get(index);
+    }
+
+    @Override
+    public Resume[] getFilledArray() {
+        return list.toArray(new Resume[0]);
     }
 
     @Override
@@ -31,11 +33,6 @@ public class ListStorage extends ArrayStorage {
     @Override
     protected void insertResume(Resume resume, int index) {
         list.add(resume);
-    }
-
-    @Override
-    protected void removeResume(int index) {
-        list.remove(index);
     }
 
     @Override

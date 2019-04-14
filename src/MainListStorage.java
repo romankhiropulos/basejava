@@ -10,7 +10,6 @@ public class MainListStorage {
         Resume r3 = new Resume("uuid3");
         Resume r4 = new Resume("uuid4");
 
-
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
         ARRAY_STORAGE.save(r3);
@@ -18,25 +17,25 @@ public class MainListStorage {
 
         ARRAY_STORAGE.update(r2);
 
-        System.out.println("Get r3: " + ARRAY_STORAGE.getResumeFromList(r3.getUuid()));
-        System.out.println("Size: " + ARRAY_STORAGE.sizeCollection(ARRAY_STORAGE.getAllList()));
+        System.out.println("Get r3: " + ARRAY_STORAGE.get(r3.getUuid()));
+        System.out.println("Size: " + ARRAY_STORAGE.size());
 
         //System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
         printAllList();
         ARRAY_STORAGE.delete(r3.getUuid());
         printAllList();
-        ARRAY_STORAGE.clearCollection(ARRAY_STORAGE.getAllList());
+        System.out.println("Size: " + ARRAY_STORAGE.size());
+        ARRAY_STORAGE.clear();
         printAllList();
 
-        System.out.println("Size: " + ARRAY_STORAGE.sizeCollection(ARRAY_STORAGE.getAllList()));
+        System.out.println("Size: " + ARRAY_STORAGE.size());
     }
 
     static void printAllList() {
         System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getAllList()) {
+        for (Resume r : ARRAY_STORAGE.getFilledArray()) {
             System.out.println(r);
         }
-
     }
 }

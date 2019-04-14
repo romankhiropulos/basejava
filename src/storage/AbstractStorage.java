@@ -5,8 +5,6 @@ import exception.NotExistStorageException;
 import exception.StorageException;
 import model.Resume;
 
-import java.util.*;
-
 public abstract class AbstractStorage implements Storage {
 
     protected static final int STORAGE_LIMIT = 10_000;
@@ -17,24 +15,27 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void insertResume(Resume resume, int index);
 
-    protected abstract void removeResume(int index);
+    protected abstract void removeResumeFromArray(int index);
 
     protected abstract void makeRemove(int index);
 
     protected abstract void replaceResume(Resume resume, int index);
 
-    public abstract void clear();
+    public abstract Resume getResume(int index);
 
-    public abstract Resume get(String uuid);
+    public abstract Resume[] getFilledArray();
 
-    public abstract int getSize();
+    protected abstract void clearAllResumes();
 
-    public void clearCollection(Collection collection) {
-        collection.clear();
+    @Override
+    public int size() {
+        return resumeCounter;
     }
 
-    public int sizeCollection(Collection collection) {
-        return collection.size();
+    @Override
+    public void clear() {
+        clearAllResumes();
+        resumeCounter = 0;
     }
 
     @Override
@@ -44,7 +45,7 @@ public abstract class AbstractStorage implements Storage {
                 int index = getIndex(resume.getUuid());
                 if (index >= 0) {
                     throw new ExistStorageException(resume.getUuid());
-                } else if (getSize() == STORAGE_LIMIT) {
+                } else if (size() == STORAGE_LIMIT) {
                     throw new StorageException("Storage overflow", resume.getUuid());
                 } else {
                     insertResume(resume, index);
@@ -76,12 +77,25 @@ public abstract class AbstractStorage implements Storage {
                 throw new NotExistStorageException(uuid);
             } else {
                 makeRemove(index);
+                resumeCounter--;
             }
         }
     }
 
     @Override
+    public Resume get(String uuid) {
+        if(uuid != null) {
+            int index = getIndex(uuid);
+            if (index < 0) {
+                throw new NotExistStorageException(uuid);
+            }
+            return getResume(index);
+        }
+        return null;
+    }
+
+    @Override
     public Resume[] getAll() {
-        return new Resume[0];
+        return getFilledArray();
     }
 }

@@ -20,7 +20,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void removeResume(int index) {
+    protected void removeResumeFromArray(int index) {
         System.arraycopy(storage, index + 1, storage, index, resumeCounter - index - 1);
     }
 }
