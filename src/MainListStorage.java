@@ -34,7 +34,7 @@ public class MainListStorage {
 
     static void printAllList() {
         System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getFilledArray()) {
+        for (Resume r : ARRAY_STORAGE.getAll()) {
             System.out.println(r);
         }
     }

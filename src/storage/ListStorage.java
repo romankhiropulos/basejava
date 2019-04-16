@@ -7,10 +7,20 @@ import java.util.List;
 
 public class ListStorage extends ArrayStorage {
 
-    public static List<Resume> list = new ArrayList<>();
+    private static List<Resume> list = new ArrayList<>();
 
     @Override
-    public void clearAllResumes() {
+    protected void makeSave(Resume resume, int index) {
+        list.add(resume);
+    }
+
+    @Override
+    public int size() {
+        return list.size();
+    }
+
+    @Override
+    public void clear() {
         list.clear();
     }
 
@@ -20,19 +30,20 @@ public class ListStorage extends ArrayStorage {
     }
 
     @Override
-    public Resume[] getFilledArray() {
+    public Resume[] getAll() {
         return list.toArray(new Resume[0]);
     }
 
     @Override
     protected int getIndex(String uuid) {
-        Resume searchKey = new Resume(uuid);
-        return list.indexOf(searchKey );
-    }
-
-    @Override
-    protected void insertResume(Resume resume, int index) {
-        list.add(resume);
+        int index = 0;
+        for (Resume resume : list) {
+            if (uuid.equals(resume.getUuid())) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
     }
 
     @Override
@@ -42,8 +53,7 @@ public class ListStorage extends ArrayStorage {
 
     @Override
     protected void replaceResume(Resume resume, int index) {
-        list.remove(index);
-        list.add(resume);
+        list.set(index, resume);
     }
 
 }
