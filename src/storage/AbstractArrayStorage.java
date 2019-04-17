@@ -11,7 +11,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
 
     protected static int resumeCounter = 0;
 
-    protected static Resume[] storage = new Resume[STORAGE_LIMIT];
+    protected Resume[] storage = new Resume[STORAGE_LIMIT];
 
     protected abstract void removeResumeFromArray(int index);
 
@@ -23,6 +23,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
             insertResume(resume, index);
+            resumeCounter++;
         }
     }
 
@@ -37,14 +38,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     }
 
     @Override
-    protected void makeRemove(int index) {
+    protected void makeRemove(int index, String uuid) {
         removeResumeFromArray(index);
         storage[resumeCounter - 1] = null;
         resumeCounter--;
     }
 
     @Override
-    public Resume getResume(int index) {
+    public Resume getResume(int index, String uuid) {
         return storage[index];
     }
 

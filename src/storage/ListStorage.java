@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ListStorage extends ArrayStorage {
 
-    private static List<Resume> list = new ArrayList<>();
+    private List<Resume> list = new ArrayList<>();
 
     @Override
     protected void makeSave(Resume resume, int index) {
@@ -25,7 +25,7 @@ public class ListStorage extends ArrayStorage {
     }
 
     @Override
-    public Resume getResume(int index) {
+    public Resume getResume(int index, String uuid) {
         return list.get(index);
     }
 
@@ -47,7 +47,7 @@ public class ListStorage extends ArrayStorage {
     }
 
     @Override
-    protected void makeRemove(int index) {
+    protected void makeRemove(int index, String uuid) {
         list.remove(index);
     }
 
