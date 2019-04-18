@@ -3,8 +3,8 @@ import storage.ListStorage;
 import storage.MapStorage;
 
 public class MainCollectionStorage {
-    static final ListStorage ARRAY_STORAGE = new ListStorage();
-    //static final MapStorage ARRAY_STORAGE = new MapStorage();
+    //static final ListStorage ARRAY_STORAGE = new ListStorage();
+    static final MapStorage ARRAY_STORAGE = new MapStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume("uuid1");

@@ -10,7 +10,7 @@ public class MapStorage extends AbstractStorage {
     private Map<String, Resume> map = new HashMap<>();
 
     @Override
-    protected void makeSave(Resume resume, int index) {
+    protected void makeSave(Resume resume, Object searchKey) {
         map.put(resume.getUuid(), resume);
     }
 
@@ -25,41 +25,37 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume getResume(int index, String uuid) {
-        return map.get(uuid);
+    public Resume getResume(Object searchKey) {
+        String key = (String) searchKey;
+        return map.get(key);
     }
 
     @Override
     public Resume[] getAll() {
-        Resume[] resumes = new Resume[map.size()];
-        int resumesCounter = 0;
-        for (Map.Entry<String, Resume> pair : map.entrySet()) {
-            resumes[resumesCounter] = pair.getValue();
-            resumesCounter++;
-        }
-        return resumes;
+        return map.values().toArray(new Resume[0]);
     }
 
     @Override
-    protected int getIndex(String uuid) {
+    protected Object getSearchKey(String uuid) {
         if(map.get(uuid) != null) {
-            return 1;
+            return uuid;
         }
-//        for (Map.Entry<String, Resume> pair : map.entrySet()) {
-//            if (uuid.equals(pair.getKey())) {
-//                return 1;
-//            }
-//        }
-        return -1;
+        return null;
     }
 
     @Override
-    protected void makeRemove(int index, String uuid) {
-        map.remove(uuid);
+    protected boolean validation(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override
-    protected void replaceResume(Resume resume, int index) {
+    protected void makeRemove(Object searchKey) {
+        String key = (String) searchKey;
+        map.remove(key);
+    }
+
+    @Override
+    protected void replaceResume(Resume resume, Object searchKey) {
         map.replace(resume.getUuid(), map.get(resume.getUuid()), resume);
     }
 }

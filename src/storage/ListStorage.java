@@ -10,7 +10,7 @@ public class ListStorage extends ArrayStorage {
     private List<Resume> list = new ArrayList<>();
 
     @Override
-    protected void makeSave(Resume resume, int index) {
+    protected void makeSave(Resume resume, Object searchKey) {
         list.add(resume);
     }
 
@@ -25,8 +25,8 @@ public class ListStorage extends ArrayStorage {
     }
 
     @Override
-    public Resume getResume(int index, String uuid) {
-        return list.get(index);
+    public Resume getResume(Object searchKey) {
+        return list.get((int) searchKey);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ListStorage extends ArrayStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
+    protected Object getSearchKey(String uuid) {
         int index = 0;
         for (Resume resume : list) {
             if (uuid.equals(resume.getUuid())) {
@@ -47,13 +47,17 @@ public class ListStorage extends ArrayStorage {
     }
 
     @Override
-    protected void makeRemove(int index, String uuid) {
-        list.remove(index);
+    protected boolean validation(Object searchKey) {
+        return (int) searchKey >= 0;
     }
 
     @Override
-    protected void replaceResume(Resume resume, int index) {
-        list.set(index, resume);
+    protected void makeRemove(Object searchKey) {
+        list.remove((int) searchKey);
     }
 
+    @Override
+    protected void replaceResume(Resume resume, Object searchKey) {
+        list.set((int) searchKey, resume);
+    }
 }

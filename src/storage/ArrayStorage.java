@@ -5,7 +5,7 @@ import model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected int getIndex(String uuid) {
+    protected Object getSearchKey(String uuid) {
         for (int i = 0; i < resumeCounter; i++) {
             if (uuid.equals(storage[i].getUuid())) {
                 return i;
@@ -15,7 +15,7 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void insertResume(Resume resume, int index) {
+    protected void insertResume(Resume resume, int searchKey) {
         storage[resumeCounter] = resume;
     }
 

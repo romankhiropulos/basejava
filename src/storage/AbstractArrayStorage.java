@@ -18,11 +18,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     protected abstract void insertResume(Resume resume, int index);
 
     @Override
-    protected void makeSave(Resume resume, int index) {
+    protected boolean validation(Object searchKey) {
+        return (int) searchKey >= 0;
+    }
+
+    @Override
+    protected void makeSave(Resume resume, Object searchKey) {
         if (size() == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
-            insertResume(resume, index);
+            insertResume(resume, (int) searchKey);
             resumeCounter++;
         }
     }
@@ -33,20 +38,20 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     }
 
     @Override
-    protected void replaceResume(Resume resume, int index) {
-        storage[index] = resume;
+    protected void replaceResume(Resume resume, Object searchKey) {
+        storage[(int) searchKey] = resume;
     }
 
     @Override
-    protected void makeRemove(int index, String uuid) {
-        removeResumeFromArray(index);
+    protected void makeRemove(Object searchKey) {
+        removeResumeFromArray((int) searchKey);
         storage[resumeCounter - 1] = null;
         resumeCounter--;
     }
 
     @Override
-    public Resume getResume(int index, String uuid) {
-        return storage[index];
+    public Resume getResume(Object searchKey) {
+        return storage[(int) searchKey];
     }
 
     @Override
