@@ -2,63 +2,61 @@ package storage;
 
 import model.Resume;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class ListStorage extends ArrayStorage {
+public class MapResumeStorage extends AbstractStorage {
 
-    private List<Resume> list = new ArrayList<>();
+    private Map<String, Resume> map = new HashMap<>();
 
     @Override
     protected void makeSave(Resume resume, Object searchKey) {
-        list.add(resume);
+        map.put(resume.getUuid(), resume);
     }
 
     @Override
     public int size() {
-        return list.size();
+        return map.size();
     }
 
     @Override
     public void clear() {
-        list.clear();
+        map.clear();
     }
 
     @Override
     public Resume getResume(Object searchKey) {
-        return list.get((int) searchKey);
+        return (Resume) searchKey;
     }
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> allFilledList = list;
+        List<Resume> allFilledList = Arrays.asList(map.values().toArray(new Resume[0]));
         allFilledList.sort(RESUME_COMPARATOR);
         return allFilledList;
     }
 
     @Override
     protected Object getSearchKey(String uuid) {
-        int index = 0;
-        for (Resume resume : list) {
-            if (uuid.equals(resume.getUuid())) {
-                return index;
-            }
-            index++;
-        }
-        return -1;
+        return map.get(uuid);
     }
 
     @Override
     protected boolean validation(Object searchKey) {
-        return (int) searchKey >= 0;
+        return searchKey != null;
     }
 
     @Override
     protected void makeRemove(Object searchKey) {
-        list.remove((int) searchKey);
+        Resume key = (Resume) searchKey;
+        map.remove(key.getUuid());
     }
 
     @Override
     protected void replaceResume(Resume resume, Object searchKey) {
-        list.set((int) searchKey, resume);
+        Resume oldValue = (Resume) searchKey;
+        map.replace(oldValue.getUuid(), oldValue, resume);
     }
 }

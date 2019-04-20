@@ -18,16 +18,21 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
+    private static final String fullName_1 = "Ivan";
+    private static final String fullName_2 = "Roman";
+    private static final String fullName_3 = "Ivan";
+    private static final String fullName_4 = "Natalie";
+
     private static final Resume RESUME_1;
     private static final Resume RESUME_2;
     private static final Resume RESUME_3;
     private static final Resume RESUME_4;
 
     static {
-        RESUME_1 = new Resume(UUID_1);
-        RESUME_2 = new Resume(UUID_2);
-        RESUME_3 = new Resume(UUID_3);
-        RESUME_4 = new Resume(UUID_4);
+        RESUME_1 = new Resume(UUID_1, fullName_1);
+        RESUME_2 = new Resume(UUID_2, fullName_2);
+        RESUME_3 = new Resume(UUID_3, fullName_3);
+        RESUME_4 = new Resume(UUID_4, fullName_4);
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -73,7 +78,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume resume = new Resume(UUID_2);
+        Resume resume = new Resume(UUID_2, fullName_2);
         storage.update(resume);
         Assert.assertSame(resume, storage.get(UUID_2));
     }
@@ -102,8 +107,8 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() {
-        Resume[] array = storage.getAll();
-        Assert.assertArrayEquals("arrays_are_not_equals", array, this.storage.getAll());
+    public void getAllSorted() {
+        Resume[] allSorted = storage.getAllSorted().toArray(new Resume[0]);
+        Assert.assertArrayEquals("arrays_are_not_equals", allSorted, this.storage.getAllSorted().toArray(new Resume[0]));
     }
 }

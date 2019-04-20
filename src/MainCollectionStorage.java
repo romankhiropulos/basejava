@@ -1,16 +1,16 @@
 import model.Resume;
 import storage.ListStorage;
-import storage.MapStorage;
+import storage.MapUUIDStorage;
 
 public class MainCollectionStorage {
     //static final ListStorage ARRAY_STORAGE = new ListStorage();
-    static final MapStorage ARRAY_STORAGE = new MapStorage();
+    static final MapUUIDStorage ARRAY_STORAGE = new MapUUIDStorage();
 
     public static void main(String[] args) {
-        Resume r1 = new Resume("uuid1");
-        Resume r2 = new Resume("uuid2");
-        Resume r3 = new Resume("uuid3");
-        Resume r4 = new Resume("uuid4");
+        Resume r1 = new Resume("uuid1", "Ivan");
+        Resume r2 = new Resume("uuid2", "Roman");
+        Resume r3 = new Resume("uuid3", "Natalie");
+        Resume r4 = new Resume("uuid4", "Ivan");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
@@ -36,7 +36,7 @@ public class MainCollectionStorage {
 
     static void printAllList() {
         System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getAll()) {
+        for (Resume r : ARRAY_STORAGE.getAllSorted()) {
             System.out.println(r);
         }
     }

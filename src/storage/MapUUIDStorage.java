@@ -2,10 +2,9 @@ package storage;
 
 import model.Resume;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class MapStorage extends AbstractStorage {
+public class MapUUIDStorage extends AbstractStorage {
 
     private Map<String, Resume> map = new HashMap<>();
 
@@ -31,16 +30,15 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return map.values().toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        List<Resume> allFilledList = Arrays.asList(map.values().toArray(new Resume[0]));
+        allFilledList.sort(RESUME_COMPARATOR);
+        return allFilledList;
     }
 
     @Override
     protected Object getSearchKey(String uuid) {
-        if(map.get(uuid) != null) {
-            return uuid;
-        }
-        return null;
+        return map.get(uuid) != null ? map.get(uuid).getUuid() : null;
     }
 
     @Override
