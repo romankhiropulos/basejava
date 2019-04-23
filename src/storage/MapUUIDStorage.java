@@ -4,12 +4,12 @@ import model.Resume;
 
 import java.util.*;
 
-public class MapUUIDStorage extends AbstractStorage {
+public class MapUUIDStorage extends AbstractStorage<String> {
 
     private Map<String, Resume> map = new HashMap<>();
 
     @Override
-    protected void makeSave(Resume resume, Object searchKey) {
+    protected void makeSave(Resume resume, String searchKey) {
         map.put(resume.getUuid(), resume);
     }
 
@@ -24,9 +24,8 @@ public class MapUUIDStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume getResume(Object searchKey) {
-        String key = (String) searchKey;
-        return map.get(key);
+    public Resume makeGet(String searchKey) {
+        return map.get(searchKey);
     }
 
     @Override
@@ -35,23 +34,22 @@ public class MapUUIDStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected String getSearchKey(String uuid) {
         return uuid;
     }
 
     @Override
-    protected boolean validate(Object searchKey) {
+    protected boolean isValidate(String searchKey) {
         return map.containsKey(searchKey);
     }
 
     @Override
-    protected void makeRemove(Object searchKey) {
-        String key = (String) searchKey;
-        map.remove(key);
+    protected void makeRemove(String searchKey) {
+        map.remove(searchKey);
     }
 
     @Override
-    protected void replaceResume(Resume resume, Object searchKey) {
+    protected void makeReplace(Resume resume, String searchKey) {
         map.replace(resume.getUuid(), map.get(resume.getUuid()), resume);
     }
 }

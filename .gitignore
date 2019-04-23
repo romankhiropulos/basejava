@@ -3,6 +3,7 @@ out
 *.iml
 log
 lib
+.attach_pid*
 
 
 

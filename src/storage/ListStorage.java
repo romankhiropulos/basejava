@@ -4,12 +4,12 @@ import model.Resume;
 
 import java.util.*;
 
-public class ListStorage extends ArrayStorage {
+public class ListStorage extends AbstractStorage<Integer> {
 
     private List<Resume> list = new ArrayList<>();
 
     @Override
-    protected void makeSave(Resume resume, Object searchKey) {
+    protected void makeSave(Resume resume, Integer searchKey) {
         list.add(resume);
     }
 
@@ -24,17 +24,17 @@ public class ListStorage extends ArrayStorage {
     }
 
     @Override
-    public Resume getResume(Object searchKey) {
-        return list.get((int) searchKey);
+    public Resume makeGet(Integer searchKey) {
+        return list.get(searchKey);
     }
 
     @Override
     public List<Resume> getAllFilledList() {
-        return list;
+        return new ArrayList<>(list);
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < list.size(); i++) {
             if (uuid.equals(list.get(i).getUuid())) {
                 return i;
@@ -44,17 +44,17 @@ public class ListStorage extends ArrayStorage {
     }
 
     @Override
-    protected boolean validate(Object searchKey) {
-        return (int) searchKey >= 0;
+    protected boolean isValidate(Integer searchKey) {
+        return searchKey >= 0;
     }
 
     @Override
-    protected void makeRemove(Object searchKey) {
-        list.remove((int) searchKey);
+    protected void makeRemove(Integer searchKey) {
+        list.remove(searchKey.intValue());
     }
 
     @Override
-    protected void replaceResume(Resume resume, Object searchKey) {
-        list.set((int) searchKey, resume);
+    protected void makeReplace(Resume resume, Integer searchKey) {
+        list.set(searchKey, resume);
     }
 }

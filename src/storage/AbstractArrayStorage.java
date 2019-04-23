@@ -6,7 +6,7 @@ import model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     protected static final int STORAGE_LIMIT = 10_000;
 
@@ -14,21 +14,21 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
 
-    protected abstract void removeResumeFromArray(int index);
+    protected abstract void removeElementFromArray(int index);
 
-    protected abstract void insertResume(Resume resume, int index);
+    protected abstract void insertElement(Resume resume, int index);
 
     @Override
-    protected boolean validate(Object searchKey) {
-        return (int) searchKey >= 0;
+    protected boolean isValidate(Integer searchKey) {
+        return searchKey >= 0;
     }
 
     @Override
-    protected void makeSave(Resume resume, Object searchKey) {
+    protected void makeSave(Resume resume, Integer searchKey) {
         if (resumeCounter == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
-            insertResume(resume, (int) searchKey);
+            insertElement(resume, searchKey);
             resumeCounter++;
         }
     }
@@ -39,20 +39,20 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void replaceResume(Resume resume, Object searchKey) {
-        storage[(int) searchKey] = resume;
+    protected void makeReplace(Resume resume, Integer searchKey) {
+        storage[searchKey] = resume;
     }
 
     @Override
-    protected void makeRemove(Object searchKey) {
-        removeResumeFromArray((int) searchKey);
+    protected void makeRemove(Integer searchKey) {
+        removeElementFromArray(searchKey);
         storage[resumeCounter - 1] = null;
         resumeCounter--;
     }
 
     @Override
-    public Resume getResume(Object searchKey) {
-        return storage[(int) searchKey];
+    public Resume makeGet(Integer searchKey) {
+        return storage[searchKey];
     }
 
     @Override
@@ -63,8 +63,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     public List<Resume> getAllFilledList() {
-        Resume[] resumes = Arrays.copyOfRange(storage, 0, resumeCounter);
-        return Arrays.asList(resumes);
+        return Arrays.asList(Arrays.copyOf(storage, resumeCounter));
     }
 }
 

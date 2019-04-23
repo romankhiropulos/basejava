@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapResumeStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage<Resume> {
 
     private Map<String, Resume> map = new HashMap<>();
 
     @Override
-    protected void makeSave(Resume resume, Object searchKey) {
+    protected void makeSave(Resume resume, Resume searchKey) {
         map.put(resume.getUuid(), resume);
     }
 
@@ -27,8 +27,8 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume getResume(Object searchKey) {
-        return (Resume) searchKey;
+    public Resume makeGet(Resume searchKey) {
+        return searchKey;
     }
 
     @Override
@@ -37,24 +37,22 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Resume getSearchKey(String uuid) {
         return map.get(uuid);
     }
 
     @Override
-    protected boolean validate(Object searchKey) {
-        return map.containsValue(searchKey);
+    protected boolean isValidate(Resume searchKey) {
+        return searchKey != null;
     }
 
     @Override
-    protected void makeRemove(Object searchKey) {
-        Resume key = (Resume) searchKey;
-        map.remove(key.getUuid());
+    protected void makeRemove(Resume searchKey) {
+        map.remove(searchKey.getUuid());
     }
 
     @Override
-    protected void replaceResume(Resume resume, Object searchKey) {
-        Resume oldValue = (Resume) searchKey;
-        map.replace(oldValue.getUuid(), oldValue, resume);
+    protected void makeReplace(Resume resume, Resume searchKey) {
+        map.replace(searchKey.getUuid(), resume);
     }
 }
