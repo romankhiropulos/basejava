@@ -30,20 +30,18 @@ public class MapUUIDStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> allFilledList = Arrays.asList(map.values().toArray(new Resume[0]));
-        allFilledList.sort(RESUME_COMPARATOR);
-        return allFilledList;
+    public List<Resume> getAllFilledList() {
+        return Arrays.asList(map.values().toArray(new Resume[0]));
     }
 
     @Override
     protected Object getSearchKey(String uuid) {
-        return map.get(uuid) != null ? map.get(uuid).getUuid() : null;
+        return uuid;
     }
 
     @Override
-    protected boolean validation(Object searchKey) {
-        return searchKey != null;
+    protected boolean validate(Object searchKey) {
+        return map.containsKey(searchKey);
     }
 
     @Override

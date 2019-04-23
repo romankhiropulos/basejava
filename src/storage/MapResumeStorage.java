@@ -32,10 +32,8 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> allFilledList = Arrays.asList(map.values().toArray(new Resume[0]));
-        allFilledList.sort(RESUME_COMPARATOR);
-        return allFilledList;
+    public List<Resume> getAllFilledList() {
+        return Arrays.asList(map.values().toArray(new Resume[0]));
     }
 
     @Override
@@ -44,8 +42,8 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean validation(Object searchKey) {
-        return searchKey != null;
+    protected boolean validate(Object searchKey) {
+        return map.containsValue(searchKey);
     }
 
     @Override

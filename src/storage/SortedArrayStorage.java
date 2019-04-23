@@ -2,13 +2,15 @@ package storage;
 
 import model.Resume;
 
+import java.util.Comparator;
+
 import static java.util.Arrays.binarySearch;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     /**
      * 1.
-     * Для binarySearch нужен массив, класс элементов которого имплементируют Comparable,
+     * Для методов, как binarySearch, нужен массив, класс элементов которого имплементируют Comparable,
      * либо ему нужен какой-либо класс - сторонний компаратор, который позволяет сравнивать
      * два объекта. Можно создать один static final resumecomparator, чтобы только его прописать
      * в методе binarySearch, вместо того чтобы каждый раз создавать новый через new ResumeComparator.
@@ -21,7 +23,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
      *     }
      * private static final ResumeComparator RESUME_COMPARATOR = new ResumeComparator();
      *
-     * binarySearch(storage, 0, resumeCounter, searchKey, RESUME_COMPARATOR);
+     * FOR EXAMPLE
+     * 1) binarySearch(storage, 0, resumeCounter, searchKey, RESUME_COMPARATOR);
+     * 2) Collections.sort(list, RESUME_COMPARATOR);
      *
      * 2.
      * Еще один способ это создание анонимного класса. Используем интерфейс Comparator.
@@ -47,11 +51,15 @@ public class SortedArrayStorage extends AbstractArrayStorage {
      * private static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
      *
      */
+    private static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
 
+    /** Используем компаратор, так как compareTo класса Resume использует два параметра resume,
+     * а у нас только uuid в getSearchKey
+     */
     @Override
     protected Object getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid, "Ivanov");
-        return binarySearch(storage, 0, resumeCounter, searchKey);
+        Resume searchKey = new Resume(uuid, "is absent");
+        return binarySearch(storage, 0, resumeCounter, searchKey, RESUME_COMPARATOR);
     }
 
     @Override

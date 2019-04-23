@@ -6,7 +6,7 @@ import model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected static final int STORAGE_LIMIT = 10_000;
 
@@ -19,13 +19,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     protected abstract void insertResume(Resume resume, int index);
 
     @Override
-    protected boolean validation(Object searchKey) {
+    protected boolean validate(Object searchKey) {
         return (int) searchKey >= 0;
     }
 
     @Override
     protected void makeSave(Resume resume, Object searchKey) {
-        if (size() == STORAGE_LIMIT) {
+        if (resumeCounter == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
             insertResume(resume, (int) searchKey);
@@ -62,9 +62,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Resume[] resumes = Arrays.copyOf(storage, resumeCounter);
-        Arrays.sort(resumes, RESUME_COMPARATOR);
+    public List<Resume> getAllFilledList() {
+        Resume[] resumes = Arrays.copyOfRange(storage, 0, resumeCounter);
         return Arrays.asList(resumes);
     }
 }

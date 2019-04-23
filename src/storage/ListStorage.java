@@ -29,26 +29,22 @@ public class ListStorage extends ArrayStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> allFilledList = list;
-        allFilledList.sort(RESUME_COMPARATOR);
-        return allFilledList;
+    public List<Resume> getAllFilledList() {
+        return list;
     }
 
     @Override
     protected Object getSearchKey(String uuid) {
-        int index = 0;
-        for (Resume resume : list) {
-            if (uuid.equals(resume.getUuid())) {
-                return index;
+        for (int i = 0; i < list.size(); i++) {
+            if (uuid.equals(list.get(i).getUuid())) {
+                return i;
             }
-            index++;
         }
         return -1;
     }
 
     @Override
-    protected boolean validation(Object searchKey) {
+    protected boolean validate(Object searchKey) {
         return (int) searchKey >= 0;
     }
 

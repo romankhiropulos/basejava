@@ -4,7 +4,7 @@ import model.Resume;
 
 import java.util.List;
 
-public interface Storage {
+interface Storage {
     void clear();
 
     void update(Resume resume);
@@ -15,7 +15,7 @@ public interface Storage {
 
     void delete(String uuid);
 
-    public List<Resume> getAllSorted();
+    List<Resume> getAllSorted();
 
     int size();
 }
