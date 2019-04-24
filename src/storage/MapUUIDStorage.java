@@ -30,7 +30,7 @@ public class MapUUIDStorage extends AbstractStorage<String> {
 
     @Override
     public List<Resume> getAllFilledList() {
-        return Arrays.asList(map.values().toArray(new Resume[0]));
+        return new ArrayList<>(map.values());
     }
 
     @Override
@@ -50,6 +50,6 @@ public class MapUUIDStorage extends AbstractStorage<String> {
 
     @Override
     protected void makeReplace(Resume resume, String searchKey) {
-        map.replace(resume.getUuid(), map.get(resume.getUuid()), resume);
+        map.replace(searchKey, resume);
     }
 }

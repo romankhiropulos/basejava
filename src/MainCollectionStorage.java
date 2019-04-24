@@ -1,5 +1,4 @@
 import model.Resume;
-import storage.ListStorage;
 import storage.MapUUIDStorage;
 
 public class MainCollectionStorage {
