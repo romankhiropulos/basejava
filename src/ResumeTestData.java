@@ -70,8 +70,8 @@ public class ResumeTestData {
         resume.getSectionType().put(EXPERIENCE, new ProgressSection(new ArrayList<>(Arrays.asList("Java Online Projects\n10/2013 - Сейчас\n Автор проекта.\nСоздание, организация и проведение Java онлайн проектов и стажировок",
                 "Wrike\n10/2014 - 01/2016\nСтарший разработчик (backend)\nПроектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."))));
 
-        resume.getSectionType().put(EDUCATION, new LocationSection(new ArrayList<>(Arrays.asList(new Location("ITMO", LocalDate.of(1914, 12, 31), LocalDate.of(1914, 12, 31), "Аспирантура (программист С, С++)",
-                " "), new Location("ITMO", LocalDate.of(1914, 12, 31), LocalDate.of(1914, 12, 31), "Инженер (программист Fortran, C)",
+        resume.getSectionType().put(EDUCATION, new LocationSection(new ArrayList<>(Arrays.asList(new Location(new Link("ITMO", "itmo.com"), LocalDate.of(1914, 12, 31), LocalDate.of(1914, 12, 31), "Аспирантура (программист С, С++)",
+                " "), new Location(new Link("ITMO", "itmo.com"), LocalDate.of(1914, 12, 31), LocalDate.of(1914, 12, 31), "Инженер (программист Fortran, C)",
                 " ")))));
 
         print(resume.getContacts(), resume.getSectionType());
