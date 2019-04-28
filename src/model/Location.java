@@ -1,0 +1,51 @@
+package model;
+
+import java.time.LocalDate;
+import java.util.Objects;
+
+public class Location {
+    private final String title;
+    private final LocalDate start;
+    private final LocalDate end;
+    private final String position;
+    private final String information;
+
+    public Location(String title, LocalDate start, LocalDate end, String position, String information) {
+        Objects.requireNonNull(title, "title must not be null");
+        Objects.requireNonNull(start, "start must not be null");
+        Objects.requireNonNull(end, "end must not be null");
+        Objects.requireNonNull(position, "position must not be null");
+        Objects.requireNonNull(information, "information must not be null");
+        this.title = title;
+        this.start = start;
+        this.end = end;
+        this.position = position;
+        this.information = information;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Location location = (Location) o;
+        return title.equals(location.title) &&
+                start.equals(location.start) &&
+                end.equals(location.end) &&
+                position.equals(location.position) &&
+                information.equals(location.information);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, start, end, position, information);
+    }
+
+    @Override
+    public String toString() {
+        return title + "\n"
+                + start + "\n"
+                + end + "\n"
+                + position + "\n"
+                + information;
+    }
+}
