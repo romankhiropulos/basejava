@@ -1,26 +1,15 @@
 package model;
 
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Location {
     private final Link locationLink;
-    private final LocalDate start;
-    private final LocalDate end;
-    private final String position;
-    private final String information;
+    private final List<Position> position;
 
-    public Location(Link locationLink, LocalDate start, LocalDate end, String position, String information) {
-        Objects.requireNonNull(locationLink, "locationLink must not be null");
-        Objects.requireNonNull(start, "start must not be null");
-        Objects.requireNonNull(end, "end must not be null");
-        Objects.requireNonNull(position, "position must not be null");
-        Objects.requireNonNull(information, "information must not be null");
-        this.locationLink = locationLink;
-        this.start = start;
-        this.end = end;
+    public Location(String location, String locationLink, List<Position> position) {
+        this.locationLink = new Link(location, locationLink);
         this.position = position;
-        this.information = information;
     }
 
     @Override
@@ -29,23 +18,17 @@ public class Location {
         if (o == null || getClass() != o.getClass()) return false;
         Location location = (Location) o;
         return locationLink.equals(location.locationLink) &&
-                start.equals(location.start) &&
-                end.equals(location.end) &&
-                position.equals(location.position) &&
-                information.equals(location.information);
+                position.equals(location.position);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(locationLink, start, end, position, information);
+        return Objects.hash(locationLink, position);
     }
 
     @Override
     public String toString() {
         return locationLink + "\n"
-                + start + "\n"
-                + end + "\n"
-                + position + "\n"
-                + information;
+                + position;
     }
 }

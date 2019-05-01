@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 import java.util.Objects;
 
-public class ProgressSection extends Sections{
+public class ProgressSection extends AbstractSection {
     private final List<String> progress;
 
     public ProgressSection(List<String> progress) {

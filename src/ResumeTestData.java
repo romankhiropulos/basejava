@@ -1,16 +1,19 @@
 import model.*;
+import util.DateUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+import static java.time.Month.FEBRUARY;
+import static java.time.Month.JANUARY;
 import static model.ContactType.*;
 import static model.SectionType.*;
 
 public class ResumeTestData {
 
-    static void print(Map<ContactType, String> contacts, Map<SectionType, Sections> sectionType) {
+    static void print(Map<ContactType, String> contacts, Map<SectionType, AbstractSection> sectionType) {
         for (Map.Entry<ContactType, String> pair : contacts.entrySet())
         {
             ContactType key = pair.getKey();
@@ -18,16 +21,15 @@ public class ResumeTestData {
             System.out.println(key + ": " + value);
         }
 
-        for (Map.Entry<SectionType, Sections> pair : sectionType.entrySet())
+        for (Map.Entry<SectionType, AbstractSection> pair : sectionType.entrySet())
         {
             SectionType key = pair.getKey();
-            Sections value = pair.getValue();
+            AbstractSection value = pair.getValue();
             System.out.println(key + ": " + value);
         }
     }
 
     public static void main(String[] args) {
-
 
         Resume resume = new Resume("Григорий Кислин");
         resume.getContacts().put(PHONE, "+7(921) 855-0482");
@@ -67,12 +69,9 @@ public class ResumeTestData {
                         "программирования\n" +
                         "Родной русский, английский \"upper intermediate\""))));
 
-        resume.getSectionType().put(EXPERIENCE, new ProgressSection(new ArrayList<>(Arrays.asList("Java Online Projects\n10/2013 - Сейчас\n Автор проекта.\nСоздание, организация и проведение Java онлайн проектов и стажировок",
-                "Wrike\n10/2014 - 01/2016\nСтарший разработчик (backend)\nПроектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."))));
-
-        resume.getSectionType().put(EDUCATION, new LocationSection(new ArrayList<>(Arrays.asList(new Location(new Link("ITMO", "itmo.com"), LocalDate.of(1914, 12, 31), LocalDate.of(1914, 12, 31), "Аспирантура (программист С, С++)",
-                " "), new Location(new Link("ITMO", "itmo.com"), LocalDate.of(1914, 12, 31), LocalDate.of(1914, 12, 31), "Инженер (программист Fortran, C)",
-                " ")))));
+        resume.getSectionType().put(EXPERIENCE, new LocationSection(new ArrayList<>(Arrays.asList(new Location("Wrike", "wrike.com", new ArrayList<>(Arrays.asList(new Position(DateUtil.of(2003, FEBRUARY), DateUtil.of(2005, FEBRUARY), "Engineer", "Making code"))))))));
+        resume.getSectionType().put(EDUCATION, new LocationSection(new ArrayList<>(Arrays.asList(new Location("ITMO", "itmo.com", new ArrayList<>(Arrays.asList(new Position(DateUtil.of(1987, FEBRUARY), DateUtil.of(1989, FEBRUARY), "Student"),
+                new Position(DateUtil.of(1989, JANUARY), DateUtil.of(1992, JANUARY), "Scientist"))))))));
 
         print(resume.getContacts(), resume.getSectionType());
 

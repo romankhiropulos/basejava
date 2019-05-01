@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 import java.util.Objects;
 
-public class LocationSection extends Sections{
+public class LocationSection extends AbstractSection {
     private final List<Location> location;
 
     public LocationSection(List<Location> location) {
