@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class MainFile {
     public static void main(String[] args) {
-        String filePath = "ExampleTextFile";
+        String filePath = "README.md";
 
         File file = new File(filePath);
         try {
