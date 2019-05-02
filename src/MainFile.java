@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainFile {
     public static void main(String[] args) {
@@ -33,12 +34,11 @@ public class MainFile {
     }
 
     private static void getFilesNames(File folder){
-        for (File currentFile : folder.listFiles()) {
+        for (File currentFile : Objects.requireNonNull(folder.listFiles())) {
             if (!currentFile.isDirectory()) {
                 System.out.println(currentFile.getName());
             }
             else {
-                System.out.println(currentFile.getName());
                 getFilesNames(currentFile);
             }
         }

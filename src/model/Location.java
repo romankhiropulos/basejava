@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class Location {
-    private final Link locationLink;
+    private final Link link;
     private final List<Position> position;
 
-    public Location(String location, String locationLink, List<Position> position) {
-        this.locationLink = new Link(location, locationLink);
+    public Location(String location, String link, List<Position> position) {
+        Objects.requireNonNull(link, "link must not be null");
+        Objects.requireNonNull(position, "position must not be null");
+        this.link = new Link(location, link);
         this.position = position;
     }
 
@@ -17,18 +19,18 @@ public class Location {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Location location = (Location) o;
-        return locationLink.equals(location.locationLink) &&
+        return link.equals(location.link) &&
                 position.equals(location.position);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(locationLink, position);
+        return Objects.hash(link, position);
     }
 
     @Override
     public String toString() {
-        return locationLink + "\n"
+        return link + "\n"
                 + position;
     }
 }

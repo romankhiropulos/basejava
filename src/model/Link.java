@@ -7,6 +7,7 @@ public class Link {
     private final String locationLink;
 
     public Link(String location, String locationLink) {
+        Objects.requireNonNull(location, "progress must not be null");
         this.location = location;
         this.locationLink = locationLink;
     }

@@ -13,10 +13,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     private File directory;
 
-    protected abstract void makeWrite(Resume r, File file) throws IOException;
-
-    protected abstract Resume makeRead(File file);
-
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
@@ -27,6 +23,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
         }
         this.directory = directory;
     }
+
+    protected abstract void makeWrite(Resume r, File file) throws IOException;
+
+    protected abstract Resume makeRead(File file);
 
     @Override
     protected File getSearchKey(String uuid) {
@@ -64,11 +64,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     @Override
     public List<Resume> getAllFilledList() {
-        List<Resume> fileArrayList = new ArrayList<>();
+        List<Resume> resumes = new ArrayList<>();
         for (File fileForList : Objects.requireNonNull(directory.listFiles(), "directory must not be null")) {
-            fileArrayList.add(makeGet(fileForList));
+            resumes.add(makeGet(fileForList));
         }
-        return fileArrayList;
+        return resumes;
     }
 
     @Override

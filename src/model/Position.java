@@ -1,48 +1,31 @@
 package model;
 
+import util.DateUtil;
+
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Objects;
 
 public class Position {
     private LocalDate start;
     private LocalDate end;
-    private String positionTitle;
-    private String positionInformation;
+    private String title;
+    private String information;
 
-    public Position(LocalDate start, LocalDate end, String positionTitle, String positionInformation) {
+    public Position(LocalDate start, LocalDate end, String title, String information) {
         Objects.requireNonNull(start, "start must not be null");
         Objects.requireNonNull(end, "end must not be null");
-        Objects.requireNonNull(positionTitle, "positionTitle must not be null");
-        Objects.requireNonNull(positionInformation, "positionInformation must not be null");
+        Objects.requireNonNull(title, "title must not be null");
         this.start = start;
         this.end = end;
-        this.positionTitle = positionTitle;
-        this.positionInformation = positionInformation;
+        this.title = title;
+        this.information = information;
     }
 
-    public Position(LocalDate start, LocalDate end, String positionTitle) {
-        Objects.requireNonNull(start, "start must not be null");
-        Objects.requireNonNull(end, "end must not be null");
-        Objects.requireNonNull(positionTitle, "positionTitle must not be null");
-        this.start = start;
-        this.end = end;
-        this.positionTitle = positionTitle;
-    }
-
-    public Position(LocalDate start, String positionTitle, String positionInformation) {
-        Objects.requireNonNull(start, "start must not be null");
-        Objects.requireNonNull(positionTitle, "positionTitle must not be null");
-        Objects.requireNonNull(positionInformation, "positionInformation must not be null");
-        this.start = start;
-        this.positionTitle = positionTitle;
-        this.positionInformation = positionInformation;
-    }
-
-    public Position(LocalDate start, String positionTitle) {
-        Objects.requireNonNull(start, "start must not be null");
-        Objects.requireNonNull(positionTitle, "positionTitle must not be null");
-        this.start = start;
-        this.positionTitle = positionTitle;
+    public Position(int yearStart, Month monthStart, int yearEnd, Month monthEnd, String title, String information) {
+        this(DateUtil.of(yearStart, monthStart), DateUtil.of(yearEnd, monthEnd), title, information);
+        this.title = title;
+        this.information = information;
     }
 
     @Override
@@ -52,20 +35,20 @@ public class Position {
         Position position = (Position) o;
         return start.equals(position.start) &&
                 end.equals(position.end) &&
-                positionTitle.equals(position.positionTitle) &&
-                positionInformation.equals(position.positionInformation);
+                title.equals(position.title) &&
+                Objects.equals(information, position.information);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(start, end, positionTitle, positionInformation);
+        return Objects.hash(start, end, title, information);
     }
 
     @Override
     public String toString() {
         return start + " - " + end +
-                " " + positionTitle +
-                "\n" + positionInformation;
+                " " + title +
+                "\n" + information;
     }
 }
 
