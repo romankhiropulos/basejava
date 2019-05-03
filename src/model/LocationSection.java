@@ -1,10 +1,16 @@
 package model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class LocationSection extends AbstractSection {
     private final List<Location> location;
+
+
+    public LocationSection(Location... location) {
+        this(Arrays.asList(location));
+    }
 
     public LocationSection(List<Location> location) {
         Objects.requireNonNull(location, "location must not be null");

@@ -37,8 +37,7 @@ public class MainFile {
         for (File currentFile : Objects.requireNonNull(folder.listFiles())) {
             if (!currentFile.isDirectory()) {
                 System.out.println(currentFile.getName());
-            }
-            else {
+            } else {
                 getFilesNames(currentFile);
             }
         }
