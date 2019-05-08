@@ -2,11 +2,13 @@ package storage;
 
 import exception.ExistStorageException;
 import exception.NotExistStorageException;
-import model.Resume;
+import model.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR = new File("/home/roman/basejava/storage");
 
     protected Storage storage;
 
@@ -32,6 +35,35 @@ public abstract class AbstractStorageTest {
         RESUME_2 = new Resume(UUID_2, "Roman");
         RESUME_3 = new Resume(UUID_3, "Natalie");
         RESUME_4 = new Resume(UUID_4, "Ivan");
+
+        RESUME_1.addContact(ContactType.MAIL, "mail1@ya.ru");
+        RESUME_1.addContact(ContactType.PHONE, "11111");
+        RESUME_1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
+        RESUME_1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
+        RESUME_1.addSection(SectionType.ACHIEVEMENT, new ProgressSection("Achivment11", "Achivment12", "Achivment13"));
+        RESUME_1.addSection(SectionType.QUALIFICATIONS, new ProgressSection("Java", "SQL", "JavaScript"));
+        RESUME_1.addSection(SectionType.EXPERIENCE,
+                new LocationSection(
+                        new Location("Location11", "http://Location11.ru",
+                                new Location.Position(2005, Month.JANUARY, "position1",
+                                        "content1"),
+                                new Location.Position(2001, Month.MARCH, 2005, Month.JANUARY,
+                                        "position2", "content2"))));
+        RESUME_1.addSection(SectionType.EDUCATION,
+                new LocationSection(
+                        new Location("Institute", null,
+                                new Location.Position(1996, Month.JANUARY, 2000, Month.DECEMBER,
+                                        "aspirant", null),
+                                new Location.Position(2001, Month.MARCH, 2005, Month.JANUARY,
+                                        "student", "IT facultet")),
+                        new Location("Location12", "http://Location12.ru")));
+        RESUME_2.addContact(ContactType.SKYPE, "skype2");
+        RESUME_2.addContact(ContactType.PHONE, "22222");
+        RESUME_1.addSection(SectionType.EXPERIENCE,
+                new LocationSection(
+                        new Location("Location2", "http://Location2.ru",
+                                new Location.Position(2015, Month.JANUARY, "position1",
+                                        "content1"))));
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -79,7 +111,7 @@ public abstract class AbstractStorageTest {
     public void update() {
         Resume resume = new Resume(UUID_2, "updatedName");
         storage.update(resume);
-        Assert.assertSame(resume, storage.get(UUID_2));
+        Assert.assertEquals(resume, storage.get(UUID_2));
     }
 
     @Test(expected = NotExistStorageException.class)

@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class ProgressSection extends AbstractSection {
+    private static final long serialVersionUID = 1L;
+
     private final List<String> progress;
 
     public ProgressSection(String... progress) {
         this(Arrays.asList(progress));
     }
+
     public ProgressSection(List<String> progress) {
         Objects.requireNonNull(progress, "progress must not be null");
         this.progress = progress;

@@ -1,13 +1,14 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Initial resume class
  */
-public class Resume implements Comparable<Resume>{
+public class Resume implements Comparable<Resume>, Serializable {
+    private static final long serialVersionUID = 1L;
 
-    // Unique identifier
     private final String uuid;
     private final String fullName;
     private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
@@ -42,6 +43,14 @@ public class Resume implements Comparable<Resume>{
 
     public AbstractSection getSection(SectionType type) {
         return sectionType.get(type);
+    }
+
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
+    }
+
+    public void addSection(SectionType type, AbstractSection section) {
+        sectionType.put(type, section);
     }
 
     @Override

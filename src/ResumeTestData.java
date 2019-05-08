@@ -68,14 +68,14 @@ public class ResumeTestData {
                         "программирования\n" +
                         "Родной русский, английский \"upper intermediate\"")));
 
-        resume.getSectionType().put(EXPERIENCE, new LocationSection(Arrays.asList(new Location("Wrike",
-                "wrike.com", Arrays.asList(new Position(DateUtil.of(2003, FEBRUARY),
-                DateUtil.of(2005, FEBRUARY), "Engineer", "Making code"))))));
-        resume.getSectionType().put(EDUCATION, new LocationSection(Arrays.asList(new Location("ITMO",
-                "itmo.com", Arrays.asList(new Position(DateUtil.of(1987, FEBRUARY),
-                        DateUtil.of(1989, FEBRUARY), "Student", ""),
-                new Position(DateUtil.of(1989, JANUARY), DateUtil.of(1992, JANUARY),
-                        "Scientist", ""))))));
+//        resume.getSectionType().put(EXPERIENCE, new LocationSection(new Location("Wrike",
+//                "wrike.com", new Location.Position(DateUtil.of(2003, FEBRUARY),
+//                DateUtil.of(2005, FEBRUARY), "Engineer", "Making code"))));
+//        resume.getSectionType().put(EDUCATION, new LocationSection(new Location("ITMO",
+//                "itmo.com", new Location.Position(DateUtil.of(1987, FEBRUARY),
+//                        DateUtil.of(1989, FEBRUARY), "Student", ""),
+//                new Location.Position(DateUtil.of(1989, JANUARY), DateUtil.of(1992, JANUARY),
+//                        "Scientist", ""))));
 
         print(resume.getContacts(), resume.getSectionType());
 

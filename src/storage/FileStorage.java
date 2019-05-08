@@ -3,30 +3,28 @@ package storage;
 import exception.StorageException;
 import model.Resume;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File>{
+public class FileStorage extends AbstractStorage<File> {
 
     private File directory;
 
-    protected AbstractFileStorage(File directory) {
+    private SerializationType serializationType;
+
+    protected FileStorage(File directory, SerializationType serializationType) {
         Objects.requireNonNull(directory, "directory must not be null");
+        this.directory = directory;
+        this.serializationType = serializationType;
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
         if (!directory.canRead() || !directory.canWrite()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
-        this.directory = directory;
     }
-
-    protected abstract void makeWrite(Resume r, File file) throws IOException;
-
-    protected abstract Resume makeRead(File file);
 
     @Override
     protected File getSearchKey(String uuid) {
@@ -37,29 +35,35 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     protected void makeSave(Resume resume, File newFile) {
         try {
             newFile.createNewFile();
-            makeWrite(resume, newFile);
         } catch (IOException e) {
-            throw new StorageException("IO error", newFile.getName(), e);
+            throw new StorageException("Couldn't create file " + newFile.getAbsolutePath(), newFile.getName(), e);
         }
+        makeReplace(resume, newFile);
     }
 
     @Override
     public Resume makeGet(File file) {
-        return makeRead(file);
+        try {
+            return serializationType.makeRead(new BufferedInputStream(new FileInputStream(file)));
+        } catch (IOException e) {
+            throw new StorageException("File read error", file.getName(), e);
+        }
     }
 
     @Override
     protected void makeReplace(Resume resume, File newFile) {
         try {
-            makeWrite(resume, newFile);
+            serializationType.makeWrite(resume, new BufferedOutputStream(new FileOutputStream(newFile)));
         } catch (IOException e) {
-            throw new StorageException("IO error", newFile.getName(), e);
+            throw new StorageException("File write error", resume.getUuid(), e);
         }
     }
 
     @Override
     protected void makeRemove(File file) {
-        file.delete();
+        if (!file.delete()) {
+            throw new StorageException("File delete error", file.getName());
+        }
     }
 
     @Override

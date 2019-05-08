@@ -1,8 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Link {
+public class Link implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String location;
     private final String locationLink;
 

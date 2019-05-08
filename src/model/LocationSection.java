@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class LocationSection extends AbstractSection {
-    private final List<Location> location;
+    private static final long serialVersionUID = 1L;
 
+    private final List<Location> location;
 
     public LocationSection(Location... location) {
         this(Arrays.asList(location));
