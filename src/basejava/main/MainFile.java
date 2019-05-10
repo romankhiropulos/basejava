@@ -1,7 +1,6 @@
 package basejava.main;
 
 import java.io.File;
-import java.util.Date;
 import java.util.Objects;
 
 public class MainFile {
@@ -33,6 +32,20 @@ public class MainFile {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
+        String str = "";
+        StringBuilder stringBuilder = new StringBuilder();
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i++) {
+            stringBuilder.append(i);
+        }
+        long middle = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i++) {
+            str += i;
+        }
+        long end = System.currentTimeMillis();
+
+        System.out.println("StringBuilder: " + (middle - start) + "\n" +
+                "Concatenation: " + (end - middle));
 
         System.out.println("Below you can see the all files from basejava directory.\n");
         getFilesNames(dir);
@@ -40,37 +53,39 @@ public class MainFile {
 
     private static void getFilesNames(File folder) {
         StringBuilder indent = new StringBuilder();
-        Date date = new Date();
+        long start = System.currentTimeMillis();
         walkDirectory(folder, indent);
-        Date date1 = new Date();
+        long middle = System.currentTimeMillis();
         walkDirectoryConcatenation(folder, "");
-        Date date2 = new Date();
-        System.out.println("StringBuilder: " + (date1.getTime() - date.getTime()) + "\n" +
-                "Concatenation: " + (date2.getTime() - date1.getTime()));
+        long end = System.currentTimeMillis();
+        System.out.println("StringBuilder: " + (middle - start) + "\n" +
+                "Concatenation: " + (end - middle));
     }
 
     private static void walkDirectory(File folder, StringBuilder indent) {
-        indent.append("\t");
         for(File file : Objects.requireNonNull(folder.listFiles())) {
             StringBuilder strOut = new StringBuilder();
             if(file.isDirectory()) {
-                System.out.println(strOut.append(indent).append(file.getName()));
-                walkDirectory(file, indent);
+                System.out.println(strOut.append(indent).append("Directory: ").append(file.getName()));
+                walkDirectory(file, indent.append("\t"));
             } else {
-                System.out.println(strOut.append(indent).append(file.getName()));
+                System.out.println(strOut.append(indent).append("File: ").append(file.getName()));
             }
         }
-        indent.delete(indent.length() - 1, indent.length());
+        try {
+            indent.delete(indent.length() - 1, indent.length());
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println("End of directory have been reached.");
+        }
     }
 
     private static void walkDirectoryConcatenation(File folder, String indent) {
-        indent += "\t";
         for(File file : Objects.requireNonNull(folder.listFiles())) {
             if(file.isDirectory()) {
-                System.out.println(indent + file.getName());
-                walkDirectoryConcatenation(file, indent);
+                System.out.println(indent + "File: " + file.getName());
+                walkDirectoryConcatenation(file, indent + "\t");
             } else {
-                System.out.println(indent + file.getName());
+                System.out.println(indent + "Directory: " + file.getName());
             }
         }
     }

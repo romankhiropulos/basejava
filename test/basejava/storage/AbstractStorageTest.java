@@ -1,5 +1,6 @@
 package basejava.storage;
 
+import basejava.ResumeTestData;
 import basejava.exception.ExistStorageException;
 import basejava.exception.NotExistStorageException;
 import basejava.model.Resume;
@@ -12,8 +13,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static basejava.main.ResumeTestData.RES_1;
-import static basejava.main.ResumeTestData.RES_2;
+import static basejava.ResumeTestData.RES_1;
+import static basejava.ResumeTestData.RES_2;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
@@ -23,6 +24,8 @@ public abstract class AbstractStorageTest {
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
+    private static final String FULL_NAME_1 = "IvanDrago";
+    private static final String FULL_NAME_2 = "RockyBalboa";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
@@ -32,6 +35,10 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_4;
 
     static {
+        ResumeTestData.UUID1 = UUID_1;
+        ResumeTestData.UUID2 = UUID_2;
+        ResumeTestData.FULL_NAME_1 = FULL_NAME_1;
+        ResumeTestData.FULL_NAME_2 = FULL_NAME_2;
         RESUME_1 = RES_1;
         RESUME_2 = RES_2;
         RESUME_3 = new Resume(UUID_3, "Natalie");
