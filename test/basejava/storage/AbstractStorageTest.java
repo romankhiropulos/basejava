@@ -21,10 +21,13 @@ public abstract class AbstractStorageTest {
     protected Storage storage;
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
-    private static final String FULL_NAME_1 = "IvanDrago";
-    private static final String FULL_NAME_2 = "RockyBalboa";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
+
+    private static final String FULL_NAME_1 = "RockyBalboa";
+    private static final String FULL_NAME_2 = "IvanDrago";
+    private static final String FULL_NAME_3 = "ApolloCreed";
+    private static final String FULL_NAME_4 = "PauliePennino";
 
     private static final Resume RESUME_1;
     private static final Resume RESUME_2;
@@ -32,11 +35,10 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_4;
 
     static {
-        Resume[] resumes = ResumeTestData.makeResume(UUID_1, FULL_NAME_1, UUID_2, FULL_NAME_2, UUID_3, UUID_4);
-        RESUME_1 = resumes[0];
-        RESUME_2 = resumes[1];
-        RESUME_3 = resumes[2];
-        RESUME_4 = resumes[3];
+        RESUME_1 = ResumeTestData.makeResume(UUID_1, FULL_NAME_1);
+        RESUME_2 = ResumeTestData.makeResume(UUID_2, FULL_NAME_2);
+        RESUME_3 = ResumeTestData.makeResume(UUID_3, FULL_NAME_3);
+        RESUME_4 = ResumeTestData.makeResume(UUID_4, FULL_NAME_4);
     }
 
     protected AbstractStorageTest(Storage storage) {
