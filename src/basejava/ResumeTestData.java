@@ -8,16 +8,17 @@ import java.util.Map;
 public class ResumeTestData {
     public static Resume RES_1;
     public static Resume RES_2;
+    public static Resume RES_3;
+    public static Resume RES_4;
 
-    public static String UUID1 = "";
-    public static String UUID2 = "";
-    public static String FULL_NAME_1 = "";
-    public static String FULL_NAME_2 = "";
+    public static void main(String[] args) {
+        print(ResumeTestData.RES_1.getContacts(), RES_1.getSectionType());
+    }
 
-    static {
-        RES_1 = new Resume(UUID1, FULL_NAME_1);
-        RES_2 = new Resume(UUID2, FULL_NAME_2);
+    public static Resume[] makeResume(String uuid1, String fullName1, String uuid2, String fullName2, String uuid3,
+                                       String uuid4) {
 
+        RES_1 = new Resume(uuid1, fullName1);
         RES_1.addContact(ContactType.MAIL, "mail1@ya.ru");
         RES_1.addContact(ContactType.PHONE, "11111");
         RES_1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
@@ -44,12 +45,15 @@ public class ResumeTestData {
                         new Location("Location2", "http://Location2.ru",
                                 new Location.Position(2015, Month.JANUARY, "position1",
                                         "content1"))));
+
+        RES_2 = new Resume(uuid2, fullName2);
         RES_2.addContact(ContactType.SKYPE, "skype2");
         RES_2.addContact(ContactType.PHONE, "22222");
-    }
 
-    public static void main(String[] args) {
-       print(ResumeTestData.RES_1.getContacts(), RES_1.getSectionType());
+        RES_3 = new Resume(uuid3);
+        RES_4 = new Resume(uuid4);
+
+        return new Resume[]{RES_1, RES_2, RES_3, RES_4};
     }
 
     private static void print(Map<ContactType, String> contacts, Map<SectionType, AbstractSection> sectionType) {

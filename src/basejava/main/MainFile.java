@@ -82,10 +82,10 @@ public class MainFile {
     private static void walkDirectoryConcatenation(File folder, String indent) {
         for(File file : Objects.requireNonNull(folder.listFiles())) {
             if(file.isDirectory()) {
-                System.out.println(indent + "File: " + file.getName());
+                System.out.println(indent + "Directory: " + file.getName());
                 walkDirectoryConcatenation(file, indent + "\t");
             } else {
-                System.out.println(indent + "Directory: " + file.getName());
+                System.out.println(indent + "File: " + file.getName());
             }
         }
     }

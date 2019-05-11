@@ -1,5 +1,7 @@
 package basejava.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -10,11 +12,15 @@ import java.util.Objects;
 import static basejava.util.DateUtil.NOW;
 import static basejava.util.DateUtil.of;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Location implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final Link link;
-    private final List<Position> positions;
+    private Link link;
+    private List<Position> positions;
+
+    public Location() {
+    }
 
     public Location(String name, String link, Position... positions) {
         this(new Link(name, link), Arrays.asList(positions));

@@ -1,13 +1,19 @@
 package basejava.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Link implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final String location;
-    private final String locationLink;
+    private String location;
+    private String locationLink;
+
+    public Link() {
+    }
 
     public Link(String location, String locationLink) {
         Objects.requireNonNull(location, "progress must not be null");

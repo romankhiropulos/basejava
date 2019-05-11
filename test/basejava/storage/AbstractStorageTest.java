@@ -13,15 +13,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static basejava.ResumeTestData.RES_1;
-import static basejava.ResumeTestData.RES_2;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = new File("/home/roman/basejava/storage");
 
     protected Storage storage;
-
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String FULL_NAME_1 = "IvanDrago";
@@ -35,14 +32,11 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_4;
 
     static {
-        ResumeTestData.UUID1 = UUID_1;
-        ResumeTestData.UUID2 = UUID_2;
-        ResumeTestData.FULL_NAME_1 = FULL_NAME_1;
-        ResumeTestData.FULL_NAME_2 = FULL_NAME_2;
-        RESUME_1 = RES_1;
-        RESUME_2 = RES_2;
-        RESUME_3 = new Resume(UUID_3, "Natalie");
-        RESUME_4 = new Resume(UUID_4, "Ivan");
+        Resume[] resumes = ResumeTestData.makeResume(UUID_1, FULL_NAME_1, UUID_2, FULL_NAME_2, UUID_3, UUID_4);
+        RESUME_1 = resumes[0];
+        RESUME_2 = resumes[1];
+        RESUME_3 = resumes[2];
+        RESUME_4 = resumes[3];
     }
 
     protected AbstractStorageTest(Storage storage) {
