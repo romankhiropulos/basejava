@@ -1,9 +1,5 @@
 package basejava.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-
-@XmlAccessorType(XmlAccessType.FIELD)
 public enum SectionType {
     PERSONAL("Личные качества"),
     OBJECTIVE("Позиция"),

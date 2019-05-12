@@ -7,7 +7,10 @@ import java.util.Objects;
 public class ProgressSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
-    private final List<String> progress;
+    private List<String> progress;
+
+    public ProgressSection() {
+    }
 
     public ProgressSection(String... progress) {
         this(Arrays.asList(progress));
