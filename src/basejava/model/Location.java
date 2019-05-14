@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class Location implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Link link;
-    private List<Position> positions;
+    private List<Position> positions = new ArrayList<>();
 
     public Location() {
     }
@@ -34,6 +35,14 @@ public class Location implements Serializable {
         Objects.requireNonNull(positions, "positions must not be null");
         this.link = link;
         this.positions = positions;
+    }
+
+    public Link getLink() {
+        return link;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
     }
 
     @Override
@@ -86,6 +95,22 @@ public class Location implements Serializable {
             this.end = end;
             this.title = title;
             this.description = description;
+        }
+
+        public LocalDate getStartDate() {
+            return start;
+        }
+
+        public LocalDate getEndDate() {
+            return end;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
         }
 
         @Override

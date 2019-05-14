@@ -21,6 +21,14 @@ public class Link implements Serializable {
         this.locationLink = locationLink;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public String getLocationLink() {
+        return locationLink;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

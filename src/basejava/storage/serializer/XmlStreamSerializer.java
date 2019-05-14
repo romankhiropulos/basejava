@@ -17,16 +17,16 @@ public class XmlStreamSerializer implements SerializationStrategy {
     }
 
     @Override
-    public void makeWrite(Resume r, OutputStream os) throws IOException {
+    public void makeWrite(Resume resume, OutputStream os) throws IOException {
         try (Writer w = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
-            xmlParser.marshall(r, w);
+            xmlParser.marshall(resume, w);
         }
     }
 
     @Override
     public Resume makeRead(InputStream is) throws IOException {
-        try (Reader r = new InputStreamReader(is, StandardCharsets.UTF_8)) {
-            return xmlParser.unmarshall(r);
+        try (Reader resume = new InputStreamReader(is, StandardCharsets.UTF_8)) {
+            return xmlParser.unmarshall(resume);
         }
     }
 }

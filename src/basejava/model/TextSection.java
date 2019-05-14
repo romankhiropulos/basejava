@@ -15,6 +15,10 @@ public class TextSection extends AbstractSection {
         this.textSection = textSection;
     }
 
+    public String getTextSection() {
+        return textSection;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

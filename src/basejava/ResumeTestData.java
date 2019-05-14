@@ -16,16 +16,15 @@ public class ResumeTestData {
         resume.addContact(ContactType.MAIL, "mail1@ya.ru");
         resume.addContact(ContactType.PHONE, "11111");
         resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
-        resume.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
-        resume.addSection(SectionType.ACHIEVEMENT, new ProgressSection("Achivment11", "Achivment12", "Achivment13"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("Imba java developer"));
+        resume.addSection(SectionType.ACHIEVEMENT, new ProgressSection("Development of projects Practice Java",
+                "Implementation from scratch Rich Internet Application", "Shuttle launch"));
         resume.addSection(SectionType.QUALIFICATIONS, new ProgressSection("Java", "SQL", "JavaScript"));
         resume.addSection(SectionType.EXPERIENCE,
                 new LocationSection(
-                        new Location("Location11", "http://Location11.ru",
-                                new Location.Position(2005, Month.JANUARY, "position1",
-                                        "content1"),
-                                new Location.Position(2001, Month.MARCH, 2005, Month.JANUARY,
-                                        "position2", "content2"))));
+                        new Location("Location2", "http://Location2.ru",
+                                new Location.Position(2015, Month.JANUARY, "position1",
+                                        "content1"))));
         resume.addSection(SectionType.EDUCATION,
                 new LocationSection(
                         new Location("Institute", null,
@@ -36,9 +35,11 @@ public class ResumeTestData {
                         new Location("Location12", "http://Location12.ru")));
         resume.addSection(SectionType.EXPERIENCE,
                 new LocationSection(
-                        new Location("Location2", "http://Location2.ru",
-                                new Location.Position(2015, Month.JANUARY, "position1",
-                                        "content1"))));
+                        new Location("Location11", "http://Location11.ru",
+                                new Location.Position(2005, Month.JANUARY, "position1",
+                                        "content1"),
+                                new Location.Position(2001, Month.MARCH, 2005, Month.JANUARY,
+                                        "position2", "content2"))));
         return resume;
     }
 

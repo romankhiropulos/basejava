@@ -8,9 +8,9 @@ import java.nio.charset.StandardCharsets;
 
 public class JsonStreamSerializer implements SerializationStrategy {
     @Override
-    public void makeWrite(Resume r, OutputStream os) throws IOException {
+    public void makeWrite(Resume resume, OutputStream os) throws IOException {
         try (Writer writer = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
-            JsonParser.write(r, writer);
+            JsonParser.write(resume, writer);
         }
     }
 
