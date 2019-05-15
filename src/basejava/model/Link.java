@@ -18,7 +18,7 @@ public class Link implements Serializable {
     public Link(String location, String locationLink) {
         Objects.requireNonNull(location, "progress must not be null");
         this.location = location;
-        this.locationLink = locationLink;
+        this.locationLink = locationLink != null ? locationLink : "";
     }
 
     public String getLocation() {

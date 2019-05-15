@@ -94,7 +94,7 @@ public class Location implements Serializable {
             this.start = start;
             this.end = end;
             this.title = title;
-            this.description = description;
+            this.description = description != null ? description : "";
         }
 
         public LocalDate getStartDate() {

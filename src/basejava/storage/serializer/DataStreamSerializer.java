@@ -32,12 +32,14 @@ public class DataStreamSerializer implements SerializationStrategy {
                     dos.writeUTF(textSection.getTextSection());
                 } else if (entry.getKey().equals(QUALIFICATIONS) || entry.getKey().equals(ACHIEVEMENT)) {
                     ProgressSection progressSection = (ProgressSection) entry.getValue();
+                    dos.writeUTF(entry.getKey().name());
                     dos.writeInt(progressSection.getProgress().size());
                     for (String x : progressSection.getProgress()) {
                         dos.writeUTF(x);
                     }
                 } else if (entry.getKey().equals(EXPERIENCE) || entry.getKey().equals(EDUCATION)) {
                     LocationSection locationSection = (LocationSection) entry.getValue();
+                    dos.writeUTF(entry.getKey().name());
                     dos.writeInt(locationSection.getLocation().size());
                     for (Location x : locationSection.getLocation()) {
                         dos.writeUTF(x.getLink().getLocation());
