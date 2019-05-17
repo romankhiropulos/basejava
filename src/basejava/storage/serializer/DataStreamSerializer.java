@@ -1,14 +1,14 @@
 package basejava.storage.serializer;
 
 import basejava.model.*;
+import basejava.util.DateUtil;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static basejava.model.SectionType.*;
 
 public class DataStreamSerializer implements SerializationStrategy {
     @Override
@@ -26,34 +26,38 @@ public class DataStreamSerializer implements SerializationStrategy {
             Map<SectionType, AbstractSection> sectionType = resume.getSectionType();
             dos.writeInt(sectionType.size());
             for (Map.Entry<SectionType, AbstractSection> entry : sectionType.entrySet()) {
-                if(entry.getKey().equals(PERSONAL) || entry.getKey().equals(OBJECTIVE)) {
-                    TextSection textSection = (TextSection) entry.getValue();
-                    dos.writeUTF(entry.getKey().name());
-                    dos.writeUTF(textSection.getTextSection());
-                } else if (entry.getKey().equals(QUALIFICATIONS) || entry.getKey().equals(ACHIEVEMENT)) {
-                    ProgressSection progressSection = (ProgressSection) entry.getValue();
-                    dos.writeUTF(entry.getKey().name());
-                    dos.writeInt(progressSection.getProgress().size());
-                    for (String x : progressSection.getProgress()) {
-                        dos.writeUTF(x);
-                    }
-                } else if (entry.getKey().equals(EXPERIENCE) || entry.getKey().equals(EDUCATION)) {
-                    LocationSection locationSection = (LocationSection) entry.getValue();
-                    dos.writeUTF(entry.getKey().name());
-                    dos.writeInt(locationSection.getLocation().size());
-                    for (Location x : locationSection.getLocation()) {
-                        dos.writeUTF(x.getLink().getLocation());
-                        dos.writeUTF(x.getLink().getLocationLink());
-                        dos.writeInt(x.getPositions().size());
-                        for (Location.Position position : x.getPositions()) {
-                            dos.writeInt(position.getStartDate().getYear());
-                            dos.writeInt(position.getStartDate().getMonth().getValue());
-                            dos.writeInt(position.getEndDate().getYear());
-                            dos.writeInt(position.getEndDate().getMonth().getValue());
-                            dos.writeUTF(position.getTitle());
-                            dos.writeUTF(position.getDescription());
+                dos.writeUTF(entry.getKey().name());
+                SectionType searchKey = entry.getKey();
+                switch (searchKey) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        TextSection textSection = (TextSection) entry.getValue();
+                        dos.writeUTF(textSection.getTextSection());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ProgressSection progressSection = (ProgressSection) entry.getValue();
+                        dos.writeInt(progressSection.getProgress().size());
+                        for (String x : progressSection.getProgress()) {
+                            dos.writeUTF(x);
                         }
-                    }
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        LocationSection locationSection = (LocationSection) entry.getValue();
+                        dos.writeInt(locationSection.getLocation().size());
+                        for (Location x : locationSection.getLocation()) {
+                            dos.writeUTF(x.getLink().getLocation());
+                            dos.writeUTF(x.getLink().getLocationLink());
+                            dos.writeInt(x.getPositions().size());
+                            for (Location.Position position : x.getPositions()) {
+                                writeDate(dos, position.getStartDate());
+                                writeDate(dos, position.getEndDate());
+                                dos.writeUTF(position.getTitle());
+                                dos.writeUTF(position.getDescription());
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -72,40 +76,53 @@ public class DataStreamSerializer implements SerializationStrategy {
 
             int sizeSections = dis.readInt();
             for (int i = 0; i < sizeSections; i++) {
-                SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                if(sectionType.equals(PERSONAL) || sectionType.equals(OBJECTIVE)) {
-                    resume.addSection(sectionType, new TextSection(dis.readUTF()));
-                } else if (sectionType.equals(QUALIFICATIONS) || sectionType.equals(ACHIEVEMENT)) {
-                    List<String> progress = new ArrayList<>();
-                    int sizeProgress = dis.readInt();
-                    for (int j = 0; j < sizeProgress; j++) {
-                        progress.add(dis.readUTF());
-                    }
-                    resume.addSection(sectionType, new ProgressSection(progress));
-                } else if (sectionType.equals(EXPERIENCE) || sectionType.equals(EDUCATION)) {
-                    List<Location> location = new ArrayList<>();
-                    int sizeLocation = dis.readInt();
-                    for (int j = 0; j < sizeLocation; j++) {
-                        String linkName = dis.readUTF();
-                        String link = dis.readUTF();
-                        List<Location.Position> positions = new ArrayList<>();
-                        int sizePositions = dis.readInt();
-                        for (int k = 0; k < sizePositions; k++) {
-                            int startYear = dis.readInt();
-                            int startMonth = dis.readInt();
-                            int endYear = dis.readInt();
-                            int endMonth = dis.readInt();
-                            String positionTitle = dis.readUTF();
-                            String positionDescription = dis.readUTF();
-                            positions.add(new Location.Position(startYear, Month.of(startMonth), endYear,
-                                    Month.of(endMonth), positionTitle, positionDescription));
+                SectionType searchKey = SectionType.valueOf(dis.readUTF());
+                switch (searchKey) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        resume.addSection(searchKey, new TextSection(dis.readUTF()));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        List<String> progress = new ArrayList<>();
+                        int sizeProgress = dis.readInt();
+                        for (int j = 0; j < sizeProgress; j++) {
+                            progress.add(dis.readUTF());
                         }
-                        location.add(new Location(new Link(linkName, link), positions));
-                    }
-                    resume.addSection(sectionType, new LocationSection(location));
+                        resume.addSection(searchKey, new ProgressSection(progress));
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        List<Location> location = new ArrayList<>();
+                        int sizeLocation = dis.readInt();
+                        for (int j = 0; j < sizeLocation; j++) {
+                            String linkName = dis.readUTF();
+                            String link = dis.readUTF();
+                            List<Location.Position> positions = new ArrayList<>();
+                            int sizePositions = dis.readInt();
+                            for (int k = 0; k < sizePositions; k++) {
+                                LocalDate dateStart = readDate(dis.readInt(), Month.of(dis.readInt()));
+                                LocalDate dateEnd = readDate(dis.readInt(), Month.of(dis.readInt()));
+                                String positionTitle = dis.readUTF();
+                                String positionDescription = dis.readUTF();
+                                positions.add(new Location.Position(dateStart, dateEnd, positionTitle, positionDescription));
+                            }
+                            location.add(new Location(new Link(linkName, link), positions));
+                        }
+                        resume.addSection(searchKey, new LocationSection(location));
+                        break;
                 }
             }
             return resume;
         }
+    }
+
+    private static void writeDate(DataOutputStream dataOutputStream, LocalDate localDate) throws IOException {
+        dataOutputStream.writeInt(localDate.getYear());
+        dataOutputStream.writeInt(localDate.getMonth().getValue());
+    }
+
+    private static LocalDate readDate(int year, Month month) {
+        return DateUtil.of(year, month);
     }
 }
