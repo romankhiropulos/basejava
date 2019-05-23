@@ -101,8 +101,8 @@ public class DataStreamSerializer implements SerializationStrategy {
                             List<Location.Position> positions = new ArrayList<>();
                             int sizePositions = dis.readInt();
                             for (int k = 0; k < sizePositions; k++) {
-                                LocalDate dateStart = readDate(dis.readInt(), Month.of(dis.readInt()));
-                                LocalDate dateEnd = readDate(dis.readInt(), Month.of(dis.readInt()));
+                                LocalDate dateStart = readDate(dis);
+                                LocalDate dateEnd = readDate(dis);
                                 String positionTitle = dis.readUTF();
                                 String positionDescription = dis.readUTF();
                                 positions.add(new Location.Position(dateStart, dateEnd, positionTitle, positionDescription));
@@ -122,7 +122,7 @@ public class DataStreamSerializer implements SerializationStrategy {
         dataOutputStream.writeInt(localDate.getMonth().getValue());
     }
 
-    private static LocalDate readDate(int year, Month month) {
-        return DateUtil.of(year, month);
+    private static LocalDate readDate(DataInputStream dataInputStream) throws IOException {
+        return DateUtil.of(dataInputStream.readInt(), Month.of(dataInputStream.readInt()));
     }
 }
