@@ -118,7 +118,7 @@ public class DataStreamSerializer implements SerializationStrategy {
         switch (sectionType) {
             case PERSONAL:
             case OBJECTIVE:
-                return new ProgressSection(dis.readUTF());
+                return new TextSection(dis.readUTF());
             case ACHIEVEMENT:
             case QUALIFICATIONS:
                 return new ProgressSection(readList(dis, dis::readUTF));
