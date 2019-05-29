@@ -1,13 +1,12 @@
 package basejava.main;
 
-
 import java.util.Arrays;
 
 public class MainDeadlock {
     private static Thread threadFirst;
     private static Thread threadSecond;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
         String[] people = {"Tom", "Alice", "Sam"};
         Integer[] numbers = {23, 4, 5, 2};
