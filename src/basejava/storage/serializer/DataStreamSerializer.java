@@ -19,12 +19,9 @@ public class DataStreamSerializer implements SerializationStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
-            writeCollection(dos, contacts.entrySet(), new Writable<Map.Entry<ContactType, String>>() {
-                @Override
-                public void writeItem(Map.Entry<ContactType, String> entry) throws IOException {
-                    dos.writeUTF(entry.getKey().name());
-                    dos.writeUTF(entry.getValue());
-                }
+            writeCollection(dos, contacts.entrySet(), entry -> {
+                dos.writeUTF(entry.getKey().name());
+                dos.writeUTF(entry.getValue());
             });
 
             Map<SectionType, AbstractSection> sectionType = resume.getSectionType();
