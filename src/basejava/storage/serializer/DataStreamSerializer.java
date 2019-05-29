@@ -13,89 +13,48 @@ import java.util.Map;
 
 public class DataStreamSerializer implements SerializationStrategy {
 
-    @FunctionalInterface
-    private interface Writable<T> {
-        void writeItem(T t) throws IOException;
-    }
-
-    private <T> void writeCollection(DataOutputStream dos, Collection<T> collection, Writable<T> writable) throws IOException {
-        dos.writeInt(collection.size());
-        for (T item : collection) {
-            writable.writeItem(item);
-        }
-    }
-
     @Override
     public void makeWrite(Resume resume, OutputStream os) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
-            writeCollection(dos, contacts.entrySet(), new Writable<Map.Entry<ContactType, String>>() {
-                @Override
-                public void writeItem(Map.Entry<ContactType, String> entry) throws IOException {
-                    dos.writeUTF(entry.getKey().name());
-                    dos.writeUTF(entry.getValue());
-                }
+            writeCollection(dos, contacts.entrySet(), entry -> {
+                dos.writeUTF(entry.getKey().name());
+                dos.writeUTF(entry.getValue());
             });
 
             Map<SectionType, AbstractSection> sectionType = resume.getSectionType();
-            writeCollection(dos, sectionType.entrySet(), new Writable<Map.Entry<SectionType, AbstractSection>>() {
-                @Override
-                public void writeItem(Map.Entry<SectionType, AbstractSection> entry) throws IOException {
-                    dos.writeUTF(entry.getKey().name());
-                    SectionType searchKey = entry.getKey();
-                    switch (searchKey) {
-                        case PERSONAL:
-                        case OBJECTIVE:
-                            TextSection textSection = (TextSection) entry.getValue();
-                            dos.writeUTF(textSection.getTextSection());
-                            break;
-                        case ACHIEVEMENT:
-                        case QUALIFICATIONS:
-                            ProgressSection progressSection = (ProgressSection) entry.getValue();
-                            writeCollection(dos, progressSection.getProgress(), new Writable<String>() {
-                                @Override
-                                public void writeItem(String string) throws IOException {
-                                    dos.writeUTF(string);
-                                }
+            writeCollection(dos, sectionType.entrySet(), entry -> {
+                dos.writeUTF(entry.getKey().name());
+                SectionType searchKey = entry.getKey();
+                switch (searchKey) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        TextSection textSection = (TextSection) entry.getValue();
+                        dos.writeUTF(textSection.getTextSection());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ProgressSection progressSection = (ProgressSection) entry.getValue();
+                        writeCollection(dos, progressSection.getProgress(), dos::writeUTF);
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        LocationSection locationSection = (LocationSection) entry.getValue();
+                        writeCollection(dos, locationSection.getLocation(), location -> {
+                            dos.writeUTF(location.getLink().getLocation());
+                            dos.writeUTF(location.getLink().getLocationLink());
+                            writeCollection(dos, location.getPositions(), position -> {
+                                writeDate(dos, position.getStartDate());
+                                writeDate(dos, position.getEndDate());
+                                dos.writeUTF(position.getTitle());
+                                dos.writeUTF(position.getDescription());
                             });
-                            break;
-                        case EXPERIENCE:
-                        case EDUCATION:
-                            LocationSection locationSection = (LocationSection) entry.getValue();
-                            writeCollection(dos, locationSection.getLocation(), new Writable<Location>() {
-                                @Override
-                                public void writeItem(Location location) throws IOException {
-                                    dos.writeUTF(location.getLink().getLocation());
-                                    dos.writeUTF(location.getLink().getLocationLink());
-                                    writeCollection(dos, location.getPositions(), new Writable<Location.Position>() {
-                                        @Override
-                                        public void writeItem(Location.Position position) throws IOException {
-                                            writeDate(dos, position.getStartDate());
-                                            writeDate(dos, position.getEndDate());
-                                            dos.writeUTF(position.getTitle());
-                                            dos.writeUTF(position.getDescription());
-                                        }
-                                    });
-                                }
-                            });
-                            break;
-                    }
+                        });
+                        break;
                 }
             });
-        }
-    }
-
-    @FunctionalInterface
-    private interface ElementProcessor {
-        void process() throws IOException;
-    }
-
-    private void readCollection(DataInputStream dis, ElementProcessor processor) throws IOException {
-        int size = dis.readInt();
-        for (int i = 0; i < size; i++) {
-            processor.process();
         }
     }
 
@@ -111,6 +70,35 @@ public class DataStreamSerializer implements SerializationStrategy {
                 resume.addSection(sectionType, readSection(dis, sectionType));
             });
             return resume;
+        }
+    }
+
+    @FunctionalInterface
+    private interface Writable<T> {
+        void writeItem(T t) throws IOException;
+    }
+
+    @FunctionalInterface
+    private interface ElementProcessor {
+        void process() throws IOException;
+    }
+
+    @FunctionalInterface
+    private interface Readable<T> {
+        T readItem() throws IOException;
+    }
+
+    private <T> void writeCollection(DataOutputStream dos, Collection<T> collection, Writable<T> writable) throws IOException {
+        dos.writeInt(collection.size());
+        for (T item : collection) {
+            writable.writeItem(item);
+        }
+    }
+
+    private void readCollection(DataInputStream dis, ElementProcessor processor) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            processor.process();
         }
     }
 
@@ -134,11 +122,6 @@ public class DataStreamSerializer implements SerializationStrategy {
             default:
                 throw new IllegalStateException();
         }
-    }
-
-    @FunctionalInterface
-    private interface Readable<T> {
-        T readItem() throws IOException;
     }
 
     private <T> List<T> readList(DataInputStream dis, Readable<T> reader) throws IOException {
