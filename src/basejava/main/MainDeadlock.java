@@ -38,6 +38,7 @@ public class MainDeadlock {
 
     private static <T> void joinThread(Thread threadJoin, Thread threadCurrent, T[] items) throws InterruptedException {
         System.out.println(threadCurrent.getName() + " start");
+        Thread.sleep(1000);
         threadJoin.join();
         Arrays.asList(items).forEach(System.out::println);
         System.out.println(threadCurrent.getName() + " finished");
