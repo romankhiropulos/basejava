@@ -17,19 +17,26 @@ import java.util.stream.Collectors;
 public class MainJava8Stream {
 
     public static void main(String[] args) {
-        int[] numbers = {8, 4, 2, 2, 1, 2, 5, 5};
+        int[] numbers = {8, 4, 2, 1, 1, 2, 5, 5};
 
         System.out.println(minValue(numbers));
-        System.out.println(oddOrEven(Arrays.stream(numbers).boxed().collect(Collectors.toList())));
+        System.out.println(oddOrEven(Arrays.stream(numbers)
+                .boxed()
+                .collect(Collectors.toList())));
     }
 
     private static int minValue(int[] values) {
-        return Arrays.stream(values).distinct().sorted().reduce(0, (x, y) -> 10 * x + y);
+        return Arrays.stream(values)
+                .distinct()
+                .sorted()
+                .reduce(0, (x, y) -> 10 * x + y);
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
-        int sum = integers.stream().reduce(0, Integer::sum);
-
-        return integers.stream().filter(x -> sum % 2 == 0 ? x % 2 > 0 : x % 2 == 0).collect(Collectors.toList());
+        int sum = integers.stream()
+                .reduce(0, Integer::sum);
+        return integers.stream()
+                .filter(x -> sum % 2 != x % 2)
+                .collect(Collectors.toList());
     }
 }
