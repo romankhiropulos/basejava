@@ -36,7 +36,7 @@ public class MainJava8Stream {
         int sum = integers.stream()
                 .reduce(0, Integer::sum);
         return integers.stream()
-                .filter(x -> sum % 2 != x % 2)
+                .filter(x -> sum % 2 != x % 2)    // equals: "filter(x -> sum % 2 == 0 ? x % 2 > 0 : x % 2 == 0)"
                 .collect(Collectors.toList());
     }
 }
