@@ -1,9 +1,5 @@
 package basejava.sql;
 
-import basejava.exception.ExistStorageException;
-import basejava.exception.StorageException;
-import org.postgresql.util.PSQLException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -25,10 +21,7 @@ public class SqlHelper {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             return executor.executeSql(ps);
         } catch (SQLException e) {
-            if (e instanceof PSQLException) {
-                throw new ExistStorageException(null);
-            }
-            throw new StorageException(e);
+            throw ExceptionUtil.convertException(e);
         }
     }
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlStorage implements Storage {
-    public final SqlHelper sqlHelper;
+    private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         sqlHelper = new SqlHelper(new ConnectionFactory() {
@@ -73,13 +73,16 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.doExecute("SELECT * FROM resume r ORDER BY full_name,uuid", ps -> {
-            ResultSet rs = ps.executeQuery();
-            List<Resume> resumes = new ArrayList<>();
-            while (rs.next()) {
-                resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
+        return sqlHelper.doExecute("SELECT * FROM resume r ORDER BY full_name,uuid", new SqlHelper.Executable<List<Resume>>() {
+            @Override
+            public List<Resume> executeSql(PreparedStatement ps) throws SQLException {
+                ResultSet rs = ps.executeQuery();
+                List<Resume> resumes = new ArrayList<>();
+                while (rs.next()) {
+                    resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
+                }
+                return resumes;
             }
-            return resumes;
         });
     }
 

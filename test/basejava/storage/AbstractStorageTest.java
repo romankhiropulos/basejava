@@ -5,6 +5,7 @@ import basejava.ResumeTestData;
 import basejava.exception.ExistStorageException;
 import basejava.exception.NotExistStorageException;
 import basejava.model.Resume;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = Config.get().getStorageDir();
+    static final File STORAGE_DIR = Config.get().getStorageDir();
 
     protected Storage storage;
     private static final String UUID_1 = UUID.randomUUID().toString();
@@ -53,6 +54,11 @@ public abstract class AbstractStorageTest {
         storage.save(RESUME_1);
         storage.save(RESUME_2);
         storage.save(RESUME_3);
+    }
+
+    @After
+    public void clearUp() throws Exception {
+        storage.clear();
     }
 
     @Test
