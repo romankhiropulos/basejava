@@ -27,11 +27,12 @@ public class SqlHelper {
         }
     }
 
-    public <T> T transactionalExecute(SqlTransaction<T> executor) {
-        try (Connection conn = connectionFactory.getConnection()) {
+    public <T> T doTransactionExecute(String sql, TransactionExecutable<T> executor) {
+        try (Connection conn = connectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             try {
                 conn.setAutoCommit(false);
-                T res = executor.doTransaction(conn);
+                T res = executor.doTransaction(ps, conn);
                 conn.commit();
                 return res;
             } catch (SQLException e) {
@@ -46,6 +47,11 @@ public class SqlHelper {
     @FunctionalInterface
     public interface Executable<T> {
         T executeSql(PreparedStatement ps) throws SQLException;
+    }
+
+    @FunctionalInterface
+    public interface TransactionExecutable<T> {
+        T doTransaction(PreparedStatement ps, Connection conn) throws SQLException;
     }
 }
 

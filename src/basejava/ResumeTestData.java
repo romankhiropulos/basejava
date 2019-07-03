@@ -1,8 +1,10 @@
 package basejava;
 
-import basejava.model.*;
+import basejava.model.AbstractSection;
+import basejava.model.ContactType;
+import basejava.model.Resume;
+import basejava.model.SectionType;
 
-import java.time.Month;
 import java.util.Map;
 
 public class ResumeTestData {
@@ -13,8 +15,8 @@ public class ResumeTestData {
 
     public static Resume makeResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-//        resume.addContact(ContactType.MAIL, "mail1@ya.ru");
-//        resume.addContact(ContactType.PHONE, "11111");
+        resume.addContact(ContactType.MAIL, "mail1@ya.ru");
+        resume.addContact(ContactType.PHONE, "11111");
 //        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
 //        resume.addSection(SectionType.PERSONAL, new TextSection("Imba java developer"));
 //        resume.addSection(SectionType.ACHIEVEMENT, new ProgressSection("Development of projects Practice Java",
