@@ -1,9 +1,6 @@
 package basejava;
 
-import basejava.model.AbstractSection;
-import basejava.model.ContactType;
-import basejava.model.Resume;
-import basejava.model.SectionType;
+import basejava.model.*;
 
 import java.util.Map;
 
@@ -17,11 +14,14 @@ public class ResumeTestData {
         Resume resume = new Resume(uuid, fullName);
         resume.addContact(ContactType.MAIL, "mail1@ya.ru");
         resume.addContact(ContactType.PHONE, "11111");
-//        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
-//        resume.addSection(SectionType.PERSONAL, new TextSection("Imba java developer"));
-//        resume.addSection(SectionType.ACHIEVEMENT, new ProgressSection("Development of projects Practice Java",
-//                "Implementation from scratch Rich Internet Application", "Shuttle launch"));
-//        resume.addSection(SectionType.QUALIFICATIONS, new ProgressSection("Java", "SQL", "JavaScript"));
+
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("Imba java developer"));
+
+        resume.addSection(SectionType.ACHIEVEMENT, new ProgressSection("Development of projects Practice Java",
+                "Implementation from scratch Rich Internet Application", "Shuttle launch"));
+        resume.addSection(SectionType.QUALIFICATIONS, new ProgressSection("Java", "SQL", "JavaScript"));
+
 //        resume.addSection(SectionType.EXPERIENCE,
 //                new LocationSection(
 //                        new Location("Location2", "http://Location2.ru",

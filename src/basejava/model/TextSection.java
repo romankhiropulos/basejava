@@ -5,18 +5,18 @@ import java.util.Objects;
 public class TextSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
-    private String textSection;
+    private String content;
 
     public TextSection() {
     }
 
-    public TextSection(String textSection) {
-        Objects.requireNonNull(textSection, "textSection must not be null");
-        this.textSection = textSection;
+    public TextSection(String content) {
+        Objects.requireNonNull(content, "content must not be null");
+        this.content = content;
     }
 
-    public String getTextSection() {
-        return textSection;
+    public String getContent() {
+        return content;
     }
 
     @Override
@@ -24,16 +24,16 @@ public class TextSection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TextSection that = (TextSection) o;
-        return textSection.equals(that.textSection);
+        return content.equals(that.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(textSection);
+        return Objects.hash(content);
     }
 
     @Override
     public String toString() {
-        return textSection;
+        return content;
     }
 }

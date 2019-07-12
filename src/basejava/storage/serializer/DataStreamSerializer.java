@@ -32,7 +32,7 @@ public class DataStreamSerializer implements SerializationStrategy {
                     case PERSONAL:
                     case OBJECTIVE:
                         TextSection textSection = (TextSection) entry.getValue();
-                        dos.writeUTF(textSection.getTextSection());
+                        dos.writeUTF(textSection.getContent());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
