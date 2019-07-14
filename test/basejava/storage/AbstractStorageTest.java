@@ -49,7 +49,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         storage.clear();
         storage.save(RESUME_1);
         storage.save(RESUME_2);
@@ -57,7 +57,7 @@ public abstract class AbstractStorageTest {
     }
 
     @After
-    public void clearUp() throws Exception {
+    public void clearUp() {
         storage.clear();
     }
 
@@ -74,7 +74,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void getNotExist() throws Exception {
+    public void getNotExist() {
         storage.get("dummy");
     }
 
