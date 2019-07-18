@@ -12,6 +12,12 @@ public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         sqlHelper = new SqlHelper(new ConnectionFactory() {
             @Override
             public Connection getConnection() throws SQLException {
