@@ -66,11 +66,11 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getFullName());
                 ps.setString(2, resume.getUuid());
                 checkResume(resume.getUuid(), ps);
-                removeContacts(conn, resume);
-                removeSections(conn, resume);
-                insertContacts(conn, resume);
-                insertSections(conn, resume);
             }
+            removeContacts(conn, resume);
+            removeSections(conn, resume);
+            insertContacts(conn, resume);
+            insertSections(conn, resume);
             return null;
         });
     }
@@ -82,9 +82,9 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 ps.setString(2, resume.getFullName());
                 ps.execute();
-                insertContacts(conn, resume);
-                insertSections(conn, resume);
             }
+            insertContacts(conn, resume);
+            insertSections(conn, resume);
             return null;
         });
     }
