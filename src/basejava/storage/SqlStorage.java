@@ -2,7 +2,6 @@ package basejava.storage;
 
 import basejava.exception.NotExistStorageException;
 import basejava.model.*;
-import basejava.sql.ConnectionFactory;
 import basejava.sql.SqlHelper;
 
 import java.sql.*;
@@ -18,12 +17,7 @@ public class SqlStorage implements Storage {
             e.printStackTrace();
         }
 
-        sqlHelper = new SqlHelper(new ConnectionFactory() {
-            @Override
-            public Connection getConnection() throws SQLException {
-                return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-            }
-        });
+        sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
     @Override
@@ -33,29 +27,31 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.doTransactionExecute("SELECT * FROM resume WHERE uuid =?", (ps, conn) -> {
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new NotExistStorageException(uuid);
+        return sqlHelper.doTransactionExecute(conn -> {
+            
+            Resume resume;
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume WHERE uuid =?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
+                    throw new NotExistStorageException(uuid);
+                }
+                resume = new Resume(uuid, rs.getString("full_name"));
             }
-
-            Resume resume = new Resume(uuid, rs.getString("full_name"));
-
-            try (PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid =?")) {
-                ps2.setString(1, uuid);
-                ResultSet rs2 = ps2.executeQuery();
-                while (rs2.next()) {
-                    putContact(rs2, resume);
+            
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid =?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    putContact(rs, resume);
                 }
             }
 
-            try (PreparedStatement ps3 = conn.prepareStatement("SELECT * FROM section WHERE resume_uuid =?")) {
-                ps3.setString(1, uuid);
-                ResultSet rs3 = ps3.executeQuery();
-                while (rs3.next()) {
-
-                    putSection(rs3, resume);
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section WHERE resume_uuid =?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    putSection(rs, resume);
                 }
             }
 
@@ -65,26 +61,30 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume resume) {
-        sqlHelper.doTransactionExecute("UPDATE resume SET full_name = ? WHERE uuid = ?", (ps, conn) -> {
-            ps.setString(1, resume.getFullName());
-            ps.setString(2, resume.getUuid());
-            checkResume(resume.getUuid(), ps);
-            removeContacts(conn, resume);
-            removeSections(conn, resume);
-            insertContacts(conn, resume);
-            insertSections(conn, resume);
+        sqlHelper.doTransactionExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? WHERE uuid = ?")) {
+                ps.setString(1, resume.getFullName());
+                ps.setString(2, resume.getUuid());
+                checkResume(resume.getUuid(), ps);
+                removeContacts(conn, resume);
+                removeSections(conn, resume);
+                insertContacts(conn, resume);
+                insertSections(conn, resume);
+            }
             return null;
         });
     }
 
     @Override
     public void save(Resume resume) {
-        sqlHelper.doTransactionExecute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", (ps, conn) -> {
-            ps.setString(1, resume.getUuid());
-            ps.setString(2, resume.getFullName());
-            ps.execute();
-            insertContacts(conn, resume);
-            insertSections(conn, resume);
+        sqlHelper.doTransactionExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
+                ps.setString(1, resume.getUuid());
+                ps.setString(2, resume.getFullName());
+                ps.execute();
+                insertContacts(conn, resume);
+                insertSections(conn, resume);
+            }
             return null;
         });
     }
@@ -121,28 +121,30 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.doTransactionExecute("SELECT * FROM resume ORDER BY full_name, uuid", (ps, conn) -> {
+        return sqlHelper.doTransactionExecute(conn -> {
             Map<String, Resume> resumes = new LinkedHashMap<>();
 
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                String uuid = rs.getString("uuid");
-                resumes.put(uuid, new Resume(uuid, rs.getString("full_name")));
-            }
-
-            try (PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM contact")) {
-                ResultSet rs2 = ps2.executeQuery();
-                while (rs2.next()) {
-                    Resume resume = resumes.get(rs2.getString("resume_uuid"));
-                    putContact(rs2, resume);
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String uuid = rs.getString("uuid");
+                    resumes.put(uuid, new Resume(uuid, rs.getString("full_name")));
                 }
             }
 
-            try (PreparedStatement ps3 = conn.prepareStatement("SELECT * FROM section")) {
-                ResultSet rs3 = ps3.executeQuery();
-                while (rs3.next()) {
-                    Resume resume = resumes.get(rs3.getString("resume_uuid"));
-                    putSection(rs3, resume);
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Resume resume = resumes.get(rs.getString("resume_uuid"));
+                    putContact(rs, resume);
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Resume resume = resumes.get(rs.getString("resume_uuid"));
+                    putSection(rs, resume);
                 }
             }
 
@@ -207,18 +209,16 @@ public class SqlStorage implements Storage {
                     case OBJECTIVE:
                         TextSection textSection = (TextSection) entry.getValue();
                         ps.setString(3, textSection.getContent());
-                        ps.addBatch();
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ProgressSection progressSection = (ProgressSection) entry.getValue();
                         List<String> progress = progressSection.getProgress();
-                        StringBuilder stringBuilder = new StringBuilder();
-                        progress.forEach(x -> stringBuilder.append(x).append("\n"));
-                        ps.setString(3, String.valueOf(stringBuilder));
-                        ps.addBatch();
+                        String joined = String.join("\n", progress);
+                        ps.setString(3, joined);
                         break;
                 }
+                ps.addBatch();
             }
             ps.executeBatch();
         }
