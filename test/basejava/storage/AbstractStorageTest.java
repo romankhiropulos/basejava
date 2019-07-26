@@ -56,10 +56,10 @@ public abstract class AbstractStorageTest {
         storage.save(RESUME_3);
     }
 
-    @After
-    public void clearUp() {
-        storage.clear();
-    }
+//    @After
+//    public void clearUp() {
+//        storage.clear();
+//    }
 
     @Test
     public void size() {
