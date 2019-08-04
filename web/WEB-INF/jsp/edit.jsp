@@ -5,7 +5,9 @@
   Time: 5:19 PM
   To change this template use File | Settings | File Templates.
 --%>
+
 <%@ page import="basejava.model.ContactType" %>
+<%@ page import="basejava.model.SectionType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -32,9 +34,12 @@
             </dl>
         </c:forEach>
         <h3>Секции:</h3>
-        <input type="text" name="section" size=30 value="1"><br/>
-        <input type="text" name="section" size=30 value="2"><br/>
-        <input type="text" name="section" size=30 value="3"><br/>
+<%--        <c:forEach var="type" items="<%=SectionType.values()%>">--%>
+<%--            <dl>--%>
+<%--                <dt>${type.title}</dt>--%>
+<%--                <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>--%>
+<%--            </dl>--%>
+<%--        </c:forEach>--%>
         <hr>
         <button type="submit">Сохранить</button>
         <button onclick="window.history.back()">Отменить</button>
