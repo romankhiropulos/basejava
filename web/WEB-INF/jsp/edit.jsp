@@ -8,6 +8,9 @@
 
 <%@ page import="basejava.model.ContactType" %>
 <%@ page import="basejava.model.SectionType" %>
+<%@ page import="basejava.model.TextSection" %>
+<%@ page import="basejava.model.ProgressSection" %>
+<%@ page import="basejava.model.AbstractSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -27,19 +30,33 @@
             <dd><input type="text" name="fullName" size=50 value="${resume.fullName}"></dd>
         </dl>
         <h3>Контакты:</h3>
-        <c:forEach var="type" items="<%=ContactType.values()%>">
+        <c:forEach var="type"
+                   items="<%=ContactType.values()%>">  <%--values() - enum's method. Returns array of enums--%>
             <dl>
                 <dt>${type.title}</dt>
                 <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>
             </dl>
         </c:forEach>
         <h3>Секции:</h3>
-<%--        <c:forEach var="type" items="<%=SectionType.values()%>">--%>
-<%--            <dl>--%>
-<%--                <dt>${type.title}</dt>--%>
-<%--                <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>--%>
-<%--            </dl>--%>
-<%--        </c:forEach>--%>
+        <c:forEach var="type" items="<%=SectionType.values()%>">
+            <c:set var="abstractSection" value="${resume.getSection(type)}"/>
+            <jsp:useBean id="abstractSection" type="basejava.model.AbstractSection"/>
+            <h4>${type.title}</h4>
+            <c:choose>
+                <c:when test="${type.equals(SectionType.PERSONAL) || type.equals(SectionType.OBJECTIVE)}">
+                    <input type="text" name="${type.name()}" size=30 value="<%=abstractSection%>">
+                    <br/>
+                </c:when>
+                <c:when test="${type.equals(SectionType.ACHIEVEMENT) || type.equals(SectionType.QUALIFICATIONS)}">
+                    <textarea name='${type}' cols=75 rows=5>
+                        <%=String.join("\n", ((ProgressSection) abstractSection).getProgress())%>
+                    </textarea>
+                </c:when>
+                <c:otherwise>
+                    <p>${""}</p>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
         <hr>
         <button type="submit">Сохранить</button>
         <button onclick="window.history.back()">Отменить</button>

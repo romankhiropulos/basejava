@@ -20,8 +20,9 @@ public class Config {
         try (InputStream is = new FileInputStream(PROPS)) {
             Properties props = new Properties();
             props.load(is);
-            storageDir = new File(props.getProperty("storage.dir"));
-            storage = new SqlStorage(props.getProperty("db.url"), props.getProperty("db.user"), props.getProperty("db.password"));
+            storageDir = new File(props.getProperty("storage.dir"));  // using for File in AbstractStorageTest
+            storage = new SqlStorage(props.getProperty("db.url"),
+                    props.getProperty("db.user"), props.getProperty("db.password")); // using for Storage in ResumeServlet
         } catch (IOException e) {
             throw new IllegalStateException("Invalid config file " + PROPS.getAbsolutePath());
         }
