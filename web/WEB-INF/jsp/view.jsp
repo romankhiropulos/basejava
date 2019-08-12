@@ -18,8 +18,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/style.css">
     <jsp:useBean id="resume" type="basejava.model.Resume" scope="request"/>
-    <%--Made object of class Resume and wrote
-                                                                                            him to variable "resume"--%>
+    <%--Made object of class Resume and wrote him to variable "resume"--%>
+
     <title>Резюме ${resume.fullName}</title> <%--Name of title web tab: "Резюме + fullName"--%>
 </head>
 <body>
