@@ -42,7 +42,7 @@
     <hr>
 <section>
     <p>
-        <c:forEach var="sectionEntry" items="${resume.sectionType}"> <%--var is current pair of Map "sectionType"--%>
+        <c:forEach var="sectionEntry" items="${resume.sections}"> <%--var is current pair of Map "sectionType"--%>
             <%--id here is (var="sectionEntry") with TYPE - "java.util.Map.Entry<basejava.model.SectionType, basejava.model.AbstractSection>"--%>
             <jsp:useBean id="sectionEntry" type="java.util.Map.Entry<basejava.model.SectionType, basejava.model.AbstractSection>"/>
             <c:set var="searchKey" value="<%=sectionEntry.getKey()%>"/>

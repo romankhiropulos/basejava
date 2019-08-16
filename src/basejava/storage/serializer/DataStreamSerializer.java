@@ -24,7 +24,7 @@ public class DataStreamSerializer implements SerializationStrategy {
                 dos.writeUTF(entry.getValue());
             });
 
-            Map<SectionType, AbstractSection> sectionType = resume.getSectionType();
+            Map<SectionType, AbstractSection> sectionType = resume.getSections();
             writeCollection(dos, sectionType.entrySet(), entry -> {
                 dos.writeUTF(entry.getKey().name());
                 SectionType searchKey = entry.getKey();

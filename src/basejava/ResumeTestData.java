@@ -2,6 +2,7 @@ package basejava;
 
 import basejava.model.*;
 
+import java.time.Month;
 import java.util.Map;
 
 public class ResumeTestData {
@@ -23,26 +24,26 @@ public class ResumeTestData {
         resume.addSection(SectionType.QUALIFICATIONS, new ProgressSection("JavaSE, Java 8, Lambda, StreamAPI, JavaEE",
                 "SQL, PostgreSQL, MongoDB", "HTML, CSS, Bootstrap, JavaScript"));
 
-//        resume.addSection(SectionType.EXPERIENCE,
-//                new LocationSection(
-//                        new Location("Location2", "http://Location2.ru",
-//                                new Location.Position(2015, Month.JANUARY, "position1",
-//                                        "content1"))));
-//        resume.addSection(SectionType.EDUCATION,
-//                new LocationSection(
-//                        new Location("Institute", null,
-//                                new Location.Position(1996, Month.JANUARY, 2000, Month.DECEMBER,
-//                                        "aspirant", null),
-//                                new Location.Position(2001, Month.MARCH, 2005, Month.JANUARY,
-//                                        "student", "IT facultet")),
-//                        new Location("Location12", "http://Location12.ru")));
-//        resume.addSection(SectionType.EXPERIENCE,
-//                new LocationSection(
-//                        new Location("Location11", "http://Location11.ru",
-//                                new Location.Position(2005, Month.JANUARY, "position1",
-//                                        "content1"),
-//                                new Location.Position(2001, Month.MARCH, 2005, Month.JANUARY,
-//                                        "position2", "content2"))));
+        resume.addSection(SectionType.EXPERIENCE,
+                new LocationSection(
+                        new Location("Location2", "http://Location2.ru",
+                                new Location.Position(2015, Month.JANUARY, "position1",
+                                        "content1"))));
+        resume.addSection(SectionType.EDUCATION,
+                new LocationSection(
+                        new Location("Institute", null,
+                                new Location.Position(1996, Month.JANUARY, 2000, Month.DECEMBER,
+                                        "aspirant", null),
+                                new Location.Position(2001, Month.MARCH, 2005, Month.JANUARY,
+                                        "student", "IT facultet")),
+                        new Location("Location12", "http://Location12.ru")));
+        resume.addSection(SectionType.EXPERIENCE,
+                new LocationSection(
+                        new Location("Location11", "http://Location11.ru",
+                                new Location.Position(2005, Month.JANUARY, "position1",
+                                        "content1"),
+                                new Location.Position(2001, Month.MARCH, 2005, Month.JANUARY,
+                                        "position2", "content2"))));
         return resume;
     }
 
@@ -51,7 +52,7 @@ public class ResumeTestData {
             System.out.println(pair.getKey() + ": " + pair.getValue());
         }
 
-        for (Map.Entry<SectionType, AbstractSection> pair : resume.getSectionType().entrySet()) {
+        for (Map.Entry<SectionType, AbstractSection> pair : resume.getSections().entrySet()) {
             System.out.println(pair.getKey() + ": " + pair.getValue());
         }
     }

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Objects;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage; // = Config.get().getStorage();
@@ -40,7 +39,7 @@ public class ResumeServlet extends HttpServlet {
             String[] values = request.getParameterValues(type.name());
             if (value == null || value.trim().length() == 0) {
                 if (values.length < 2) {
-                    resume.getSectionType().remove(type);
+                    resume.getSections().remove(type);
                 }
             } else {
                 switch (type) {
@@ -51,6 +50,9 @@ public class ResumeServlet extends HttpServlet {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         resume.addSection(type, new ProgressSection(value.split("\\n")));
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
                         break;
                 }
             }

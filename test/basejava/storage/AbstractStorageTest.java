@@ -32,7 +32,7 @@ public abstract class AbstractStorageTest {
     private static final String FULL_NAME_3 = "ApolloCreed";
     private static final String FULL_NAME_4 = "PauliePennino";
 
-    private static final Resume RESUME_1;
+    public static final Resume RESUME_1;
     private static final Resume RESUME_2;
     private static final Resume RESUME_3;
     private static final Resume RESUME_4;
