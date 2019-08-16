@@ -38,16 +38,15 @@
             </dl>
         </c:forEach>
         <h3>Секции:</h3>
-        <c:forEach var="type" items="<%=SectionType.values()%>">
+        <c:forEach var="type" items="<%=new SectionType[]{SectionType.PERSONAL, SectionType.OBJECTIVE, SectionType.QUALIFICATIONS, SectionType.ACHIEVEMENT}%>">
             <c:set var="abstractSection" value="${resume.getSection(type)}"/>
             <jsp:useBean id="abstractSection" type="basejava.model.AbstractSection"/>
             <h4>${type.title}</h4>
             <c:choose>
                 <c:when test="${type.equals(SectionType.PERSONAL) || type.equals(SectionType.OBJECTIVE)}">
                     <input type="text" name="${type.name()}" size=30 value="<%=abstractSection%>">
-                    <br/>
                 </c:when>
-                <c:when test="${type.equals(SectionType.ACHIEVEMENT) || type.equals(SectionType.QUALIFICATIONS)}">
+                <c:when test="${type.equals(SectionType.QUALIFICATIONS) || type.equals(SectionType.ACHIEVEMENT)}">
                     <textarea name='${type}' cols=75 rows=5>
                         <%=String.join("\n", ((ProgressSection) abstractSection).getProgress())%>
                     </textarea>

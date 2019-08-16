@@ -1,10 +1,7 @@
 package basejava.web;
 
 import basejava.Config;
-import basejava.model.AbstractSection;
-import basejava.model.ContactType;
-import basejava.model.Resume;
-import basejava.model.SectionType;
+import basejava.model.*;
 import basejava.storage.Storage;
 
 import javax.servlet.ServletConfig;
@@ -13,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage; // = Config.get().getStorage();
@@ -37,16 +35,26 @@ public class ResumeServlet extends HttpServlet {
                 resume.getContacts().remove(type);
             }
         }
-//        // todo
-//        for (SectionType type : SectionType.values()) {
-//            String value = request.getParameter(type.name());
-//            AbstractSection value2 = request.getParameter("abstractSection");
-//            if (value != null && value.trim().length() != 0) {
-//                resume.addSection(type, value2);
-//            } else {
-//                resume.getSectionType().remove(type);
-//            }
-//        }
+        for (SectionType type : SectionType.values()) {
+            String value = request.getParameter(type.name());
+            String[] values = request.getParameterValues(type.name());
+            if (value == null || value.trim().length() == 0) {
+                if (values.length < 2) {
+                    resume.getSectionType().remove(type);
+                }
+            } else {
+                switch (type) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        resume.addSection(type, new TextSection(value));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        resume.addSection(type, new ProgressSection(value.split("\\n")));
+                        break;
+                }
+            }
+        }
         storage.update(resume);
         response.sendRedirect("resume");
     }

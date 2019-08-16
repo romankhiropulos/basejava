@@ -26,7 +26,7 @@
             <th></th>
             <th></th>
         </tr>
-        <c:forEach items="${resumes}" var="resume">
+        <c:forEach var="resume" items="${resumes}">
             <jsp:useBean id="resume" type="basejava.model.Resume"/>
             <tr>
                 <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
