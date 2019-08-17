@@ -13,6 +13,8 @@
 <%@ page import="basejava.model.TextSection" %>
 <%@ page import="basejava.model.ProgressSection" %>
 <%@ page import="java.util.List" %>
+<%@ page import="basejava.model.LocationSection" %>
+<%@ page import="basejava.util.DateUtil" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -26,7 +28,8 @@
 <jsp:include page="fragments/header.jsp"/>
 <section>
     <%--view of current full name--%>
-    <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png" alt="fix"></a></h2>
+    <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"
+                                                                                      alt="fix"></a></h2>
 
     <%--view of contact list--%>
     <p>
@@ -39,33 +42,55 @@
         </c:forEach>
     </p>
 </section>
-    <hr>
+<hr>
 <section>
     <p>
         <c:forEach var="sectionEntry" items="${resume.sections}"> <%--var is current pair of Map "sectionType"--%>
             <%--id here is (var="sectionEntry") with TYPE - "java.util.Map.Entry<basejava.model.SectionType, basejava.model.AbstractSection>"--%>
-            <jsp:useBean id="sectionEntry" type="java.util.Map.Entry<basejava.model.SectionType, basejava.model.AbstractSection>"/>
+            <jsp:useBean id="sectionEntry"
+                         type="java.util.Map.Entry<basejava.model.SectionType, basejava.model.AbstractSection>"/>
             <c:set var="searchKey" value="<%=sectionEntry.getKey()%>"/>
-            <c:choose>
-                <c:when test="${searchKey.equals(SectionType.PERSONAL) || searchKey.equals(SectionType.OBJECTIVE)}">
-                    <h3><%=sectionEntry.getKey().getTitle()%></h3>
-                    <% TextSection textSection = (TextSection) sectionEntry.getValue(); %>
-                    <%=textSection.getContent()%>
-                    <br/>
-                </c:when>
-                <c:when test="${searchKey.equals(SectionType.ACHIEVEMENT) || searchKey.equals(SectionType.QUALIFICATIONS)}">
-                    <h3><%=sectionEntry.getKey().getTitle()%></h3>
-                    <% ProgressSection progressSection = (ProgressSection) sectionEntry.getValue(); %>
-                    <c:set var="progress" value="<%=progressSection.getProgress()%>"/>
-                    <c:forEach var="item" items="${progress}">
-                    <p>${item}</p>
-                     </c:forEach>
-                </c:when>
-                <c:otherwise>
-                    <p>${""}</p>
-                </c:otherwise>
-            </c:choose>
+        <c:choose>
+        <c:when test="${searchKey.equals(SectionType.PERSONAL) || searchKey.equals(SectionType.OBJECTIVE)}">
+    <h3><%=sectionEntry.getKey().getTitle()%></h3>
+    <% TextSection textSection = (TextSection) sectionEntry.getValue(); %>
+    <%=textSection.getContent()%>
+    <br/>
+    </c:when>
+    <c:when test="${searchKey.equals(SectionType.ACHIEVEMENT) || searchKey.equals(SectionType.QUALIFICATIONS)}">
+        <h3><%=sectionEntry.getKey().getTitle()%></h3>
+        <% ProgressSection progressSection = (ProgressSection) sectionEntry.getValue(); %>
+        <c:set var="progress" value="<%=progressSection.getProgress()%>"/>
+        <c:forEach var="item" items="${progress}">
+            <p>${item}</p>
         </c:forEach>
+    </c:when>
+    <c:when test="${searchKey.equals(SectionType.EXPERIENCE) || searchKey.equals(SectionType.EDUCATION)}">
+        <h3><%=sectionEntry.getKey().getTitle()%></h3>
+        <% LocationSection locationSection = (LocationSection) sectionEntry.getValue(); %>
+        <c:forEach var="location" items="<%=locationSection.getLocation()%>">
+            <p>
+                    <c:choose>
+                        <c:when test="${empty location.link.locationLink}">
+                            <h4>${location.link.locationName}</h4>
+                        </c:when>
+                        <c:otherwise>
+                            <h4><a href="${location.link.locationLink}">${location.link.locationName}</a></h4>
+                        </c:otherwise>
+                    </c:choose>
+            <c:forEach var="position" items="${location.positions}">
+                <jsp:useBean id="position" type="basejava.model.Location.Position"/>
+                    <p><%=("С " + (position.getStartDate()) + " по " + position.getEndDate())%>
+                            ${position.title}<br>
+                            ${position.description}</p>
+            </c:forEach>
+        </c:forEach>
+    </c:when>
+    <c:otherwise>
+        <p>${""}</p>
+    </c:otherwise>
+    </c:choose>
+    </c:forEach>
     </p>
 </section>
 
