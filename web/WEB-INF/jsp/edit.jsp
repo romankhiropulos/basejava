@@ -6,11 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="basejava.model.ContactType" %>
-<%@ page import="basejava.model.SectionType" %>
-<%@ page import="basejava.model.TextSection" %>
-<%@ page import="basejava.model.ProgressSection" %>
-<%@ page import="basejava.model.AbstractSection" %>
+<%@ page import="basejava.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -38,18 +34,60 @@
             </dl>
         </c:forEach>
         <h3>Секции:</h3>
-        <c:forEach var="type" items="<%=new SectionType[]{SectionType.PERSONAL, SectionType.OBJECTIVE, SectionType.QUALIFICATIONS, SectionType.ACHIEVEMENT}%>">
+        <c:forEach var="type" items="<%=SectionType.values()%>">
             <c:set var="abstractSection" value="${resume.getSection(type)}"/>
             <jsp:useBean id="abstractSection" type="basejava.model.AbstractSection"/>
             <h4>${type.title}</h4>
             <c:choose>
                 <c:when test="${type.equals(SectionType.PERSONAL) || type.equals(SectionType.OBJECTIVE)}">
-                    <input type="text" name="${type.name()}" size=30 value="<%=abstractSection%>">
+                    <input type="text" name="${type.name()}" value="<%=abstractSection%>" size=30>
                 </c:when>
                 <c:when test="${type.equals(SectionType.QUALIFICATIONS) || type.equals(SectionType.ACHIEVEMENT)}">
                     <textarea name='${type}' cols=75 rows=5>
                         <%=String.join("\n", ((ProgressSection) abstractSection).getProgress())%>
                     </textarea>
+                </c:when>
+                <c:when test="${type.equals(SectionType.EXPERIENCE) || type.equals(SectionType.EDUCATION)}">
+                    <c:forEach var="location" items="<%=((LocationSection) abstractSection).getLocation()%>"
+                               varStatus="counter">
+                        <dl>
+                            <dt>Организация:</dt>
+                            <dd><input type="text" name='${type}' size=60 value="${location.link.locationName}"></dd>
+                        </dl>
+                        <dl>
+                            <dt>Сайт:</dt>
+                            <dd><input type="text" name='${type}url' size=60 value="${location.link.locationLink}"></dd>
+                        </dl>
+                        <br>
+                        <div>
+                            <c:forEach var="position" items="${location.positions}">
+                                <jsp:useBean id="position" type="basejava.model.Location.Position"/>
+                                <dl>
+                                    <dt>Начальная дата:</dt>
+                                    <dd>
+                                        <input type="text" name="${position.startDate}" size=10
+                                               value="<%=position.getStartDate()%>" placeholder="MM/yyyy">
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>Конечная дата:</dt>
+                                    <dd>
+                                        <input type="text" name="${position.endDate}" size=10
+                                               value="<%=position.getEndDate()%>" placeholder="MM/yyyy">
+                                </dl>
+                                <dl>
+                                    <dt>Должность:</dt>
+                                    <dd><input type="text" name="${type.title}" size=60
+                                               value="${position.title}">
+                                </dl>
+                                <dl>
+                                    <dt>Описание:</dt>
+                                    <dd><textarea name="${type.title}" rows=5 cols=60">
+                                            ${position.description}</textarea></dd>
+                                </dl>
+                            </c:forEach>
+                        </div>
+                    </c:forEach>
                 </c:when>
                 <c:otherwise>
                     <p>${""}</p>

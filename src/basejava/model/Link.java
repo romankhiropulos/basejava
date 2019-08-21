@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Link implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String location;
+    private String locationName;
     private String locationLink;
 
     public Link() {
@@ -17,12 +17,12 @@ public class Link implements Serializable {
 
     public Link(String location, String locationLink) {
         Objects.requireNonNull(location, "progress must not be null");
-        this.location = location;
+        this.locationName = location;
         this.locationLink = locationLink != null ? locationLink : "";
     }
 
-    public String getLocation() {
-        return location;
+    public String getLocationName() {
+        return locationName;
     }
 
     public String getLocationLink() {
@@ -34,18 +34,18 @@ public class Link implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Link link = (Link) o;
-        return location.equals(link.location) &&
+        return locationName.equals(link.locationName) &&
                 Objects.equals(locationLink, link.locationLink);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(location, locationLink);
+        return Objects.hash(locationName, locationLink);
     }
 
     @Override
     public String toString() {
-        return location + "\n"
+        return locationName + "\n"
                 + locationLink + "\n";
     }
 }

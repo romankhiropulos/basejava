@@ -19,7 +19,7 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>   <%--http://www.javaportal.ru/java/articles/Java_Server_Pages.html--%>
 <section>
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table border="1" cellpadding="8" cellspacing="0" align="center">
         <tr>
             <th>Имя</th>
             <th>Email</th>
