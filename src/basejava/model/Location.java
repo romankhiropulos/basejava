@@ -20,6 +20,8 @@ import static basejava.util.DateUtil.of;
 public class Location implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public static final Location EMPTY = new Location("", "", Position.EMPTY);
+
     private Link link;
     private List<Position> positions = new ArrayList<>();
 
@@ -68,6 +70,8 @@ public class Location implements Serializable {
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
         private static final long serialVersionUID = 1L;
+
+        public static final Position EMPTY = new Position();
 
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate start;

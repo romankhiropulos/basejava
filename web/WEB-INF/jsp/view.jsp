@@ -68,7 +68,7 @@
     <c:when test="${searchKey.equals(SectionType.EXPERIENCE) || searchKey.equals(SectionType.EDUCATION)}">
         <h3><%=sectionEntry.getKey().getTitle()%></h3>
         <% LocationSection locationSection = (LocationSection) sectionEntry.getValue(); %>
-        <c:forEach var="location" items="<%=locationSection.getLocation()%>">
+        <c:forEach var="location" items="<%=locationSection.getLocations()%>">
             <p>
                     <c:choose>
                         <c:when test="${empty location.link.locationLink}">

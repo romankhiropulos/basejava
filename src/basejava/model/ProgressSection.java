@@ -7,6 +7,8 @@ import java.util.Objects;
 public class ProgressSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
+    public static final ProgressSection EMPTY = new ProgressSection("");
+
     private List<String> progress;
 
     public ProgressSection() {

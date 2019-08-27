@@ -7,22 +7,22 @@ import java.util.Objects;
 public class LocationSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
-    private List<Location> location;
+    private List<Location> locations;
 
     public LocationSection() {
     }
 
-    public LocationSection(Location... location) {
-        this(Arrays.asList(location));
+    public LocationSection(Location... locations) {
+        this(Arrays.asList(locations));
     }
 
-    public LocationSection(List<Location> location) {
-        Objects.requireNonNull(location, "location must not be null");
-        this.location = location;
+    public LocationSection(List<Location> locations) {
+        Objects.requireNonNull(locations, "location must not be null");
+        this.locations = locations;
     }
 
-    public List<Location> getLocation() {
-        return location;
+    public List<Location> getLocations() {
+        return locations;
     }
 
     @Override
@@ -30,16 +30,16 @@ public class LocationSection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LocationSection that = (LocationSection) o;
-        return location.equals(that.location);
+        return locations.equals(that.locations);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(location);
+        return Objects.hash(locations);
     }
 
     @Override
     public String toString() {
-        return String.valueOf(location);
+        return String.valueOf(locations);
     }
 }

@@ -42,7 +42,7 @@ public class DataStreamSerializer implements SerializationStrategy {
                     case EXPERIENCE:
                     case EDUCATION:
                         LocationSection locationSection = (LocationSection) entry.getValue();
-                        writeCollection(dos, locationSection.getLocation(), location -> {
+                        writeCollection(dos, locationSection.getLocations(), location -> {
                             dos.writeUTF(location.getLink().getLocationName());
                             dos.writeUTF(location.getLink().getLocationLink());
                             writeCollection(dos, location.getPositions(), position -> {
