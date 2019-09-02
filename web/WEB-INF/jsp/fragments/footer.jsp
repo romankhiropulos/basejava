@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<hr/>
-<footer>
+
+<footer style="text-align: center;">
     Проект <a href="http://javaops.ru/reg/basejava">Разработка Web приложения База данных резюме</a>
 </footer>

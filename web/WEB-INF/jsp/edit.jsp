@@ -46,6 +46,7 @@
             
                 <c:choose>
                     <c:when test="${type.equals(SectionType.OBJECTIVE)}">
+
 <%--                        Value here introduce content of current TextSection --%>
                         <input type='text' name='${type}' size=75 value='<%=abstractSection%>'>
                     </c:when>
@@ -60,12 +61,12 @@
                         <c:forEach var="location" items="<%=((LocationSection) abstractSection).getLocations()%>"
                                    varStatus="counter">
                             <dl>
-                                <dt>Название учереждения:</dt>
-                                <dd><input type="text" name='${type}' size=100 value="${location.link.locationName}"></dd>
+                                <dt style="width: 200px">Название учреждения:</dt>
+                                <dd><input type="text" name='${type}' size=45 value="${location.link.locationName}"></dd>
                             </dl>
                             <dl>
-                                <dt>Сайт учереждения:</dt>
-                                <dd><input type="text" name='${type}url' size=100 value="${location.link.locationLink}"></dd>
+                                <dt style="width: 200px">Сайт учреждения:</dt>
+                                <dd><input type="text" name='${type}url' size=45 value="${location.link.locationLink}"></dd>
                                 </dd>
                             </dl>
                             <br>

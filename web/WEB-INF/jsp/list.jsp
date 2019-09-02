@@ -17,9 +17,13 @@
     <title>Список всех резюме</title>
 </head>
 <body>
-<jsp:include page="fragments/header.jsp"/>   <%--http://www.javaportal.ru/java/articles/Java_Server_Pages.html--%>
+<jsp:include page="fragments/header.jsp"/>
+<%--http://www.javaportal.ru/java/articles/Java_Server_Pages.html--%>
 <section>
-    <table border="1" cellpadding="8" cellspacing="0" align="center">
+    <table border="1" cellpadding="8" cellspacing="0" style="margin: auto">
+        <tr>
+            <td colspan="4"><a href="resume?action=add" title="Добавить резюме"><img src="img/add.png"></a></td>
+        </tr>
         <tr>
             <th>Имя</th>
             <th>Email</th>
@@ -30,9 +34,12 @@
             <jsp:useBean id="resume" type="basejava.model.Resume"/>
             <tr>
                 <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
-                <td><%=ContactType.MAIL.toHtml(resume.getContact(ContactType.MAIL))%></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png"></a></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"></a></td>
+                <td><%=ContactType.MAIL.toHtml(resume.getContact(ContactType.MAIL))%>
+                </td>
+                <td><a href="resume?uuid=${resume.uuid}&action=delete" title="Удалить резюме"><img
+                        src="img/delete.png"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=edit" title="Редактировать резюме"><img
+                        src="img/pencil.png"></a></td>
             </tr>
         </c:forEach>
     </table>

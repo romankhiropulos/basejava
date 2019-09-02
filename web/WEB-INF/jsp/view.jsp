@@ -15,83 +15,111 @@
 <%@ page import="java.util.List" %>
 <%@ page import="basejava.model.LocationSection" %>
 <%@ page import="basejava.util.DateUtil" %>
+<%@ page import="basejava.util.HtmlUtil" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/style.css">
-    <jsp:useBean id="resume" type="basejava.model.Resume" scope="request"/>
-    <%--Made object of class Resume and wrote him to variable "resume"--%>
 
-    <title>Резюме ${resume.fullName}</title> <%--Name of title web tab: "Резюме + fullName"--%>
+    <%--Made object of class Resume and wrote him to variable "resume"--%>
+    <jsp:useBean id="resume" type="basejava.model.Resume" scope="request"/>
+
+    <%--Name of title web tab: "Резюме + fullName"--%>
+    <title>Резюме ${resume.fullName}</title>
 </head>
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <%--view of current full name--%>
-    <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"
-                                                                                      alt="fix"></a></h2>
 
-    <%--view of contact list--%>
+    <%--View of current full name--%>
+    <h1>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"
+                                                                                      alt="fix"></a></h1>
+
+    <%--View of contact list--%>
     <p>
-        <c:forEach var="contactEntry" items="${resume.contacts}"> <%--var is current pair of Map "contacts"--%>
-            <jsp:useBean id="contactEntry"
-                         type="java.util.Map.Entry<basejava.model.ContactType, java.lang.String>"/> <%--id here is var
-                         "contactEntry" with type - pair(key, value) from Map"contacts"--%>
-            <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/> <%--Get key(type(enam)) of current pair
-                of contactEntry and invoke method "toHtml" with parameter "value of current pair of contactEntry"--%>
+        <%--var is current pair of Map "contacts"--%>
+        <c:forEach var="contactEntry" items="${resume.contacts}">
+
+            <%--id here is var "contactEntry" with type - pair(key, value) from Map"contacts"--%>
+            <jsp:useBean id="contactEntry" type="java.util.Map.Entry<basejava.model.ContactType, java.lang.String>"/>
+
+            <%--Get key(type(enam)) of current pair of contactEntry and invoke method "toHtml" with parameter
+            "value of current pair of contactEntry"--%>
+            <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
     </p>
-</section>
-<hr>
-<section>
-    <p>
-        <c:forEach var="sectionEntry" items="${resume.sections}"> <%--var is current pair of Map "sectionType"--%>
-            <%--id here is (var="sectionEntry") with TYPE - "java.util.Map.Entry<basejava.model.SectionType, basejava.model.AbstractSection>"--%>
+    <hr>
+    <table cellpadding="2">
+
+        <%--var is current pair of Map "sectionType"--%>
+        <c:forEach var="sectionEntry" items="${resume.sections}">
+
+            <%--id here is (var="sectionEntry") with TYPE - "java.util.Map.Entry<basejava.model.SectionType,
+            basejava.model.AbstractSection>"--%>
             <jsp:useBean id="sectionEntry"
                          type="java.util.Map.Entry<basejava.model.SectionType, basejava.model.AbstractSection>"/>
-            <c:set var="searchKey" value="<%=sectionEntry.getKey()%>"/>
-        <c:choose>
-        <c:when test="${searchKey.equals(SectionType.PERSONAL) || searchKey.equals(SectionType.OBJECTIVE)}">
-    <h3><%=sectionEntry.getKey().getTitle()%></h3>
-    <% TextSection textSection = (TextSection) sectionEntry.getValue(); %>
-    <%=textSection.getContent()%>
+            <c:set var="type" value="${sectionEntry.key}"/>
+            <c:set var="abstractSection" value="${sectionEntry.value}"/>
+            <jsp:useBean id="abstractSection" type="basejava.model.AbstractSection"/>
+            <tr>
+                <td colspan="2"><h3><a name="type.name">${type.title}</a></h3></td>
+            </tr>
+            <c:choose>
+                <c:when test="${type=='OBJECTIVE'}">
+                    <tr>
+                        <td colspan="2">
+                            <%=((TextSection) abstractSection).getContent()%>
+                        </td>
+                    </tr>
+                </c:when>
+                <c:when test="${type=='PERSONAL'}">
+                    <tr>
+                        <td colspan="2">
+                            <%=((TextSection) abstractSection).getContent()%>
+                        </td>
+                    </tr>
+                </c:when>
+                <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
+                    <tr>
+                        <td colspan="2">
+                            <ul>
+                                <c:forEach var="item" items="<%=((ProgressSection) abstractSection).getProgress()%>">
+                                    <li>${item}</li>
+                                </c:forEach>
+                            </ul>
+                        </td>
+                    </tr>
+                </c:when>
+                <c:when test="${type=='EXPERIENCE' || type=='EDUCATION'}">
+                    <c:forEach var="location" items="<%=((LocationSection) abstractSection).getLocations()%>">
+                        <tr>
+                            <td colspan="2">
+                                <c:choose>
+                                    <c:when test="${empty location.link.locationLink}">
+                                        <h3>${location.link.locationName}</h3>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h3><a href="${location.link.locationLink}">${location.link.locationName}</a>
+                                        </h3>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                        <c:forEach var="position" items="${location.positions}">
+                            <jsp:useBean id="position" type="basejava.model.Location.Position"/>
+                            <tr>
+                                <td width="15%" style="vertical-align: top"><%=HtmlUtil.formatDates(position)%>
+                                </td>
+                                <td><b>${position.title}</b><br>${position.description}</td>
+                            </tr>
+                        </c:forEach>
+                    </c:forEach>
+                </c:when>
+            </c:choose>
+        </c:forEach>
+    </table>
     <br/>
-    </c:when>
-    <c:when test="${searchKey.equals(SectionType.ACHIEVEMENT) || searchKey.equals(SectionType.QUALIFICATIONS)}">
-        <h3><%=sectionEntry.getKey().getTitle()%></h3>
-        <% ProgressSection progressSection = (ProgressSection) sectionEntry.getValue(); %>
-        <c:set var="progress" value="<%=progressSection.getProgress()%>"/>
-        <c:forEach var="item" items="${progress}">
-            <p>${item}</p>
-        </c:forEach>
-    </c:when>
-    <c:when test="${searchKey.equals(SectionType.EXPERIENCE) || searchKey.equals(SectionType.EDUCATION)}">
-        <h3><%=sectionEntry.getKey().getTitle()%></h3>
-        <% LocationSection locationSection = (LocationSection) sectionEntry.getValue(); %>
-        <c:forEach var="location" items="<%=locationSection.getLocations()%>">
-            <p>
-                    <c:choose>
-                        <c:when test="${empty location.link.locationLink}">
-                            <h4>${location.link.locationName}</h4>
-                        </c:when>
-                        <c:otherwise>
-                            <h4><a href="${location.link.locationLink}">${location.link.locationName}</a></h4>
-                        </c:otherwise>
-                    </c:choose>
-            <c:forEach var="position" items="${location.positions}">
-                <jsp:useBean id="position" type="basejava.model.Location.Position"/>
-                    <p><%=("С " + (position.getStartDate()) + " по " + position.getEndDate())%>
-                            ${position.title}<br>
-                            ${position.description}</p>
-            </c:forEach>
-        </c:forEach>
-    </c:when>
-    <c:otherwise>
-        <p>${""}</p>
-    </c:otherwise>
-    </c:choose>
-    </c:forEach>
-    </p>
+    <button onclick="window.history.back()">ОК</button>
 </section>
 
 <jsp:include page="fragments/footer.jsp"/>
