@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD) // - чтобы не делать сеттеры
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
     private static final long serialVersionUID = 1L;
 

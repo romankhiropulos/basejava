@@ -5,6 +5,7 @@ log
 lib
 .attach_pid*
 .directory
+*.properties
 
 
 

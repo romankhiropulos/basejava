@@ -56,10 +56,10 @@ public abstract class AbstractStorageTest {
         storage.save(RESUME_3);
     }
 
-//    @After
-//    public void clearUp() {
-//        storage.clear();
-//    }
+    @After
+    public void clearUp() {
+        storage.clear();
+    }
 
     @Test
     public void size() {
@@ -130,7 +130,7 @@ public abstract class AbstractStorageTest {
     }
 
     private void assertGet(Resume r) {
-        Resume n = storage.get(r.getUuid()); // резюме, загруженное из хранилища
+        Resume n = storage.get(r.getUuid());
         assertEquals(r, n);
     }
 

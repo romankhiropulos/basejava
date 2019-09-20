@@ -6,56 +6,33 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%--View of current resume on Web site--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="basejava.model.SectionType" %>
-<%@ page import="basejava.model.TextSection" %>
-<%@ page import="basejava.model.ProgressSection" %>
-<%@ page import="java.util.List" %>
 <%@ page import="basejava.model.LocationSection" %>
-<%@ page import="basejava.util.DateUtil" %>
+<%@ page import="basejava.model.ProgressSection" %>
+<%@ page import="basejava.model.TextSection" %>
 <%@ page import="basejava.util.HtmlUtil" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/style.css">
-
-    <%--Made object of class Resume and wrote him to variable "resume"--%>
     <jsp:useBean id="resume" type="basejava.model.Resume" scope="request"/>
-
-    <%--Name of title web tab: "Резюме + fullName"--%>
     <title>Резюме ${resume.fullName}</title>
 </head>
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-
-    <%--View of current full name--%>
     <h1>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"
                                                                                       alt="fix"></a></h1>
-
-    <%--View of contact list--%>
     <p>
-        <%--var is current pair of Map "contacts"--%>
         <c:forEach var="contactEntry" items="${resume.contacts}">
-
-            <%--id here is var "contactEntry" with type - pair(key, value) from Map"contacts"--%>
             <jsp:useBean id="contactEntry" type="java.util.Map.Entry<basejava.model.ContactType, java.lang.String>"/>
-
-            <%--Get key(type(enam)) of current pair of contactEntry and invoke method "toHtml" with parameter
-            "value of current pair of contactEntry"--%>
             <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
     </p>
     <hr>
     <table cellpadding="2">
-
-        <%--var is current pair of Map "sectionType"--%>
         <c:forEach var="sectionEntry" items="${resume.sections}">
-
-            <%--id here is (var="sectionEntry") with TYPE - "java.util.Map.Entry<basejava.model.SectionType,
-            basejava.model.AbstractSection>"--%>
             <jsp:useBean id="sectionEntry"
                          type="java.util.Map.Entry<basejava.model.SectionType, basejava.model.AbstractSection>"/>
             <c:set var="type" value="${sectionEntry.key}"/>
