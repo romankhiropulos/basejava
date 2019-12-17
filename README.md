@@ -1,5 +1,3 @@
-# Курс BaseJava (обновленный и переработанный)
-
 ## Разработка Web приложения "База данных резюме"
   -  используем: Java 8, <a href="https://zeroturnaround.com/rebellabs/java-tools-and-technologies-landscape-2016-trends/#java-ides-adoption">IntelliJ IDEA</a>,
     <a href="https://zeroturnaround.com/rebellabs/java-tools-and-technologies-landscape-2016-trends/#java-vcs-adoption">GitHib/Git</a>, Сервлеты, JSP, JSTL, Tomcat, JUnit, PostgreSQL, GSON, JAXB
@@ -14,6 +12,4 @@
      - в контейнер сервлетов <a href="http://tomcat.apache.org/">Tomcat</a>
      - в облачный сервис <a href="https://www.heroku.com/">Heroku</a>
 
-Приложение будет разрабатываться начиная со первого занятия, основываясь на базовых темах курса:
-**объектная модель, коллекции, система ввода-вывода, работа с файлами, сериализация, работа с XML, JSON, SQL, персистентность в базу данных (PostgreSQL), сервлеты, HTML/JSP/JSTL, веб-контейнер Tomcat, модульные тесты JUnit, java.basejava.util.Logging, система контроля версий Git.**
 
